@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO" Language="ko_KR">
+      <Text>Enhanced Town Focus Info (향상된 마을 전문화)</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO_DESCRIPTION" Language="ko_KR">
+      <Text>마을 전문화를 선택할 때 개선 시설, 건물 및 교역로에서 발생하는 보너스의 상세 내역을 표시합니다. Yamada와 Mallek의 원본 작업을 기반으로 합니다</Text>
+    </Replace>
+  </LocalizedText>
+</Database>

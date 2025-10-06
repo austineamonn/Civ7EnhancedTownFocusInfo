@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <SimplifiedChineseText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+      <Text>特殊区域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+      <Text>建筑区域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+      <Text>独特文明区域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+      <Text>全地块区域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+      <Text>时代加成</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+      <Text>伐木场</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+      <Text>矿井</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+      <Text>渔船</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+      <Text>农场</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+      <Text>牧场</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+      <Text>种植园</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+      <Text>营地</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+      <Text>黏土坑</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+      <Text>采石场</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+      <Text>贸易路线</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+      <Text>连接的定居点</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+      <Text>城市</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+      <Text>城镇</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+      <Text>每个连接的加成</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+      <Text>总资源</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+      <Text>每个资源的幸福度</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+      <Text>资源</Text>
+    </Replace>
+  </SimplifiedChineseText>
+</Database>

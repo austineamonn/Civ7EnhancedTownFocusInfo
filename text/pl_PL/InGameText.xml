@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <PolishText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+      <Text>Dzielnice Specjalne</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+      <Text>Dzielnice</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+      <Text>Unikalne Dzielnice Cywilizacji</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+      <Text>Dzielnice Pełnopolowe</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+      <Text>Mnożnik Epoki</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+      <Text>Drwal</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+      <Text>Kopalnia</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+      <Text>Łódź rybacka</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+      <Text>Farma</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+      <Text>Pastwisko</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+      <Text>Plantacja</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+      <Text>Obóz</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+      <Text>Glinianka</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+      <Text>Kamieniołom</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+      <Text>Szlaki handlowe</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+      <Text>Połączone Osiedla</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+      <Text>Miasta</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+      <Text>Miasteczka</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+      <Text>Premia za połączenia</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+      <Text>Zasoby Łącznie</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+      <Text>Zadowolenie za Zasób</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+      <Text>Zasoby</Text>
+    </Replace>
+  </PolishText>
+</Database>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <LocalizedText>
+    <Row Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO" Language="pl_PL">
+      <Text>Enhanced Town Focus Info (Rozszerzone informacje o specjalizacji miasteczek)</Text>
+    </Row>
+    <Row Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO_DESCRIPTION" Language="pl_PL">
+      <Text>Przedstawia szczegółowe zestawienie ulepszeń, budynków, szlaków handlowych i połączeń między osiedlami, które zwiększają premie za specjalizację miasteczek. Na podstawie oryginalnej pracy autorstwa Yamada i Mallek</Text>
+    </Row>
+  </LocalizedText>
+</Database>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <ItalianText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+      <Text>Quartieri Speciali</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+      <Text>Quartieri Edificio</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+      <Text>Quartieri Unici di Civiltà</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+      <Text>Quartieri a Tessera Intera</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+      <Text>Bonus Epoca</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+      <Text>Segheria</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+      <Text>Miniera</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+      <Text>Peschereccio</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+      <Text>Fattoria</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+      <Text>Pascolo</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+      <Text>Piantagione</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+      <Text>Campo</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+      <Text>Cava d'argilla</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+      <Text>Cava</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+      <Text>Rotte commerciali</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+      <Text>Collegamenti commerciali</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+      <Text>Città</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+      <Text>Paesi</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+      <Text>Bonus per connessione</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+      <Text>Risorse totali</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+      <Text>Felicità per risorsa</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+      <Text>Risorse</Text>
+    </Replace>

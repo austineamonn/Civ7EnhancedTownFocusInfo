@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO" Language="zh_Hans_CN">
+      <Text>Enhanced Town Focus Info (增强城镇专业化信息)</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO_DESCRIPTION" Language="zh_Hans_CN">
+      <Text>在《文明7》中增强显示的城镇专业化产出加成，展示改进、建筑和贸易路线对专业化加成的详细分解。基于 Yamada 和 Mallek 的原创工作</Text>
+    </Replace>
+  </LocalizedText>
+</Database>

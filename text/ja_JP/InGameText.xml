@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <JapaneseText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+      <Text>特殊区画 (+1 ずつ)</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+      <Text>建物区画 (+1 ずつ)</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+      <Text>文明固有の区画</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+      <Text>フルタイル区画</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+      <Text>時代ボーナス</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+      <Text>木こり小屋</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+      <Text>鉱山</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+      <Text>漁船</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+      <Text>農場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+      <Text>牧場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+      <Text>プランテーション</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+      <Text>狩猟キャンプ</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+      <Text>粘土採掘場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+      <Text>採石場</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+      <Text>交易路</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+      <Text>接続された居住地</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+      <Text>都市</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+      <Text>町</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+      <Text>接続ごとのボーナス</Text>
+    </Replace>
+
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+      <Text>資源の合計</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+      <Text>資源ごとの幸福度</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+      <Text>資源</Text>
+    </Replace>
+  </JapaneseText>
+</Database>
