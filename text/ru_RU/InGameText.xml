@@ -1,74 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Database>
-  <RussianText>
-    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS" Language="ru_RU">
       <Text>Уникальные Кварталы</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS" Language="ru_RU">
       <Text>Кварталы</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS" Language="ru_RU">
       <Text>Цивилизационные Кварталы</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS" Language="ru_RU">
       <Text>Полноклеточные Кварталы</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS" Language="ru_RU">
       <Text>Бонус Эпохи</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER" Language="ru_RU">
       <Text>Лесоруб</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE" Language="ru_RU">
       <Text>Рудник</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT" Language="ru_RU">
       <Text>Рыбацкое судно</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM" Language="ru_RU">
       <Text>Ферма</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE" Language="ru_RU">
       <Text>Пастбище</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION" Language="ru_RU">
       <Text>Плантация</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP" Language="ru_RU">
       <Text>Лагерь</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT" Language="ru_RU">
       <Text>Глиняная яма</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY" Language="ru_RU">
       <Text>Каменоломня</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES" Language="ru_RU">
       <Text>Торговые пути</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS" Language="ru_RU">
       <Text>Связанные Поселения</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES" Language="ru_RU">
       <Text>Города</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS" Language="ru_RU">
       <Text>Городки</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION" Language="ru_RU">
       <Text>Бонус за Соединение</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES" Language="ru_RU">
       <Text>Всего Ресурсов</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE" Language="ru_RU">
       <Text>Довольство за ресурс</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ru_RU">
       <Text>Ресурсы</Text>
     </Replace>
-  </RussianText>
+  </LocalizedText>
 </Database>
