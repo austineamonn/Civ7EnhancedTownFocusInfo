@@ -1,74 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Database>
-  <KoreanText>
-    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS" Language="ko_KR">
       <Text>특수 지구</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS" Language="ko_KR">
       <Text>건물 구역</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS" Language="ko_KR">
       <Text>문명 특유 구역</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS" Language="ko_KR">
       <Text>타일 전체 점유 구역</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS" Language="ko_KR">
       <Text>유산 보너스</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER" Language="ko_KR">
       <Text>벌목장</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE" Language="ko_KR">
       <Text>광산</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT" Language="ko_KR">
       <Text>어선</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM" Language="ko_KR">
       <Text>농장</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE" Language="ko_KR">
       <Text>목장</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION" Language="ko_KR">
       <Text>플랜테이션</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP" Language="ko_KR">
       <Text>야영지</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT" Language="ko_KR">
       <Text>점토</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY" Language="ko_KR">
       <Text>채석장</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES" Language="ko_KR">
       <Text>교역로</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS" Language="ko_KR">
       <Text>연결된 정착지</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES" Language="ko_KR">
       <Text>도시</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS" Language="ko_KR">
       <Text>마을</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION" Language="ko_KR">
       <Text>연결 당 보너스</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES" Language="ko_KR">
       <Text>총 자원</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE" Language="ko_KR">
       <Text>자원 당 행복도</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ko_KR">
       <Text>자원</Text>
     </Replace>
-  </KoreanText>
+  </LocalizedText>
 </Database>

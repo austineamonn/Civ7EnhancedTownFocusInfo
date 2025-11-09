@@ -1,74 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Database>
-  <SimplifiedChineseText>
-    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS">
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS" Language="zh_ZH">
       <Text>特殊区域</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS" Language="zh_ZH">
       <Text>建筑区域</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS" Language="zh_ZH">
       <Text>独特文明区域</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS">
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS" Language="zh_ZH">
       <Text>全地块区域</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS">
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS" Language="zh_ZH">
       <Text>时代加成</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER" Language="zh_ZH">
       <Text>伐木场</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE" Language="zh_ZH">
       <Text>矿井</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT" Language="zh_ZH">
       <Text>渔船</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM" Language="zh_ZH">
       <Text>农场</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE" Language="zh_ZH">
       <Text>牧场</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION" Language="zh_ZH">
       <Text>种植园</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP" Language="zh_ZH">
       <Text>营地</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT" Language="zh_ZH">
       <Text>黏土坑</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY">
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY" Language="zh_ZH">
       <Text>采石场</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES">
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES" Language="zh_ZH">
       <Text>贸易路线</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS">
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS" Language="zh_ZH">
       <Text>连接的定居点</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES">
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES" Language="zh_ZH">
       <Text>城市</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS">
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS" Language="zh_ZH">
       <Text>城镇</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION" Language="zh_ZH">
       <Text>每个连接的加成</Text>
     </Replace>
 
-    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES" Language="zh_ZH">
       <Text>总资源</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE" Language="zh_ZH">
       <Text>每个资源的幸福度</Text>
     </Replace>
-    <Replace Tag="LOC_MOD_ETFI_RESOURCES">
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="zh_ZH">
       <Text>资源</Text>
     </Replace>
-  </SimplifiedChineseText>
+  </LocalizedText>
 </Database>
