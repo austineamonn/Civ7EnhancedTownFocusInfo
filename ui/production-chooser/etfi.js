@@ -4,7 +4,7 @@ import { IsElement } from '/core/ui/utilities/utilities-dom.chunk.js';
 import { c as GetTownFocusBlp } from '/base-standard/ui/production-chooser/production-chooser-helpers.chunk.js';
 import { A as AdvisorUtilities } from '/base-standard/ui/tutorial/tutorial-support.chunk.js';
 
-// #region Etfi Improvements
+// #region Localization constants
 const ETFI_IMPROVEMENTS = {
   displayNames: {
     IMPROVEMENT_WOODCUTTER: "LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER",
@@ -40,143 +40,6 @@ const ETFI_IMPROVEMENTS = {
   },
 };
 
-function getImprovementBonus(city) {
-  if (!city || !city.Constructibles) {
-    return { total: 0, details: {}, multiplier: 1 };
-  }
-
-  const targetImprovements = Array.from(ETFI_IMPROVEMENTS.sets.food);
-  const targetSet = new Set(targetImprovements);
-
-  const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
-  const detailedCounts = {};
-
-  for (const instanceId of improvements) {
-    const instance = Constructibles.get(instanceId);
-    if (!instance) continue;
-
-    const location = instance?.location;
-    if (location?.x == null || location?.y == null) continue;
-
-    // Using free constructible to get the warehouse bonus
-    const fcID = Districts.getFreeConstructible(
-      location,
-      GameContext.localPlayerID
-    );
-    const info = GameInfo.Constructibles.lookup(fcID);
-    if (!info) continue;
-
-    if (targetSet.has(info.ConstructibleType)) {
-      const displayName = Locale.compose(
-        ETFI_IMPROVEMENTS.displayNames[info.ConstructibleType] ||
-          info.ConstructibleType
-      );
-      detailedCounts[displayName] = (detailedCounts[displayName] || 0) + 1;
-    }
-  }
-
-  const baseTotal = Object.values(detailedCounts).reduce(
-    (sum, count) => sum + count,
-    0
-  );
-
-  // Food towns use +1/+2/+3 by era (same as your old code: base 1 + age bonus)
-  let multiplier = 1;
-  const ageData = GameInfo.Ages.lookup(Game.age);
-  if (ageData) {
-    const currentAge = ageData.AgeType?.trim();
-    if (currentAge === "AGE_EXPLORATION") {
-      multiplier = 2;
-    } else if (currentAge === "AGE_MODERN") {
-      multiplier = 3;
-    }
-  }
-
-  return {
-    total: baseTotal * multiplier,
-    details: detailedCounts,
-    multiplier,
-  };
-}
-
-// #region Render Tooltip Logic
-function renderGranaryBlock(etfiTooltipInstance, city) {
-  const tooltipRoot = etfiTooltipInstance.tooltip;
-  if (!tooltipRoot) return;
-
-  // Only apply to the specific project
-  const projectNameId = etfiTooltipInstance.target?.dataset?.name;
-  if (projectNameId !== "LOC_PROJECT_TOWN_GRANARY_NAME") return;
-
-  const bonus = getImprovementBonus(city);
-
-  // Reuse container if it already exists
-  let container = tooltipRoot.querySelector(".etfi-granary-block");
-  if (container) {
-    container.remove(); // remove old one so we can rebuild cleanly
-  }
-
-  container = document.createElement("div");
-  container.className =
-    "etfi-granary-block mt-2 p-2 rounded-md production-chooser-tooltip__subtext-bg flex flex-col gap-1";
-
-  // Top row: icon + total
-  const totalRow = document.createElement("div");
-  totalRow.className = "flex items-center gap-2 text-accent-2";
-
-  const icon = document.createElement("fxs-icon");
-  icon.setAttribute("data-icon-id", "YIELD_FOOD");
-  icon.classList.add("size-5");
-
-  const totalText = document.createElement("span");
-  totalText.className = "font-semibold";
-  totalText.textContent = `+${bonus.total}`;
-
-  totalRow.append(icon, totalText);
-  container.appendChild(totalRow);
-
-  // Breakdown rows
-  if (bonus.details && Object.keys(bonus.details).length > 0) {
-    const breakdown = document.createElement("div");
-    breakdown.className = "mt-1 text-xs text-accent-2";
-
-    for (const [name, count] of Object.entries(bonus.details)) {
-      const row = document.createElement("div");
-      row.className = "flex justify-between";
-
-      const labelSpan = document.createElement("span");
-      labelSpan.textContent = name;
-
-      const valueSpan = document.createElement("span");
-      valueSpan.textContent = `+${count}`;
-
-      row.append(labelSpan, valueSpan);
-      breakdown.appendChild(row);
-    }
-
-    // Era multiplier line, if > 1
-    if (bonus.multiplier > 1) {
-      const eraRow = document.createElement("div");
-      eraRow.className =
-        "flex justify-between mt-1 pt-1 border-t border-white/10";
-
-      const eraLabel = document.createElement("span");
-      eraLabel.textContent = Locale.compose("LOC_MOD_ETFI_ERA_BONUS");
-
-      const eraValue = document.createElement("span");
-      eraValue.textContent = `x${bonus.multiplier}`;
-
-      eraRow.append(eraLabel, eraValue);
-      breakdown.appendChild(eraRow);
-    }
-
-    container.appendChild(breakdown);
-  }
-
-  // Insert after the vanilla description
-  etfiTooltipInstance.description.insertAdjacentElement("afterend", container);
-}
-
 // #region EtfiToolTipType
 const bulletChar = String.fromCodePoint(8226);
 class EtfiToolTipType {
@@ -193,11 +56,12 @@ class EtfiToolTipType {
     divider = document.createElement("div");
     glow = document.createElement("div");
     description = document.createElement("p");
+    detailsContainer = document.createElement("div");  // NEW: extra “details” block (ETFI info)
     productionCost = document.createElement("div");
     requirementsContainer = document.createElement("div");
     requirementsText = document.createElement("div");
     gemsContainer = document.createElement("div");
-    // #endregion
+   
     constructor() {
       this.glow.classList.add(
         "h-24",
@@ -217,6 +81,7 @@ class EtfiToolTipType {
       dividerRight.classList.add("filigree-shell-small-right");
       this.divider.className = "flex flex-row items-center self-center";
       this.divider.append(dividerLeft, this.icon, dividerRight);
+      this.detailsContainer.className = "flex mt-2 p-2 production-chooser-tooltip__subtext-bg etfi-details"; // NEW: details block
       this.productionCost.className = "mt-2";
       this.requirementsContainer.className = "flex mt-2 p-2 production-chooser-tooltip__subtext-bg";
       this.requirementsContainer.append(this.requirementsText);
@@ -226,6 +91,7 @@ class EtfiToolTipType {
         this.header,
         this.divider,
         this.description,
+        this.detailsContainer, // NEW: ETFI details
         this.productionCost,
         this.requirementsContainer,
         this.gemsContainer
@@ -279,6 +145,7 @@ class EtfiToolTipType {
       if (!city) { return; }
       const name = this.target.dataset.name ?? "";
       const description = (this.target.dataset.tooltipDescription || this.target.dataset.description) ?? "";
+      const detailsText = this.getDetailsText(city);   // NEW: project-specific ETFI data
       const growthType = Number(this.target.dataset.growthType);
       const productionCost = projectType ? city.Production?.getProjectProductionCost(projectType) : -1;
       const requirementsText = this.getRequirementsText();
@@ -310,6 +177,16 @@ class EtfiToolTipType {
       } else {
         this.productionCost.classList.add("hidden");
       }
+
+      // NEW: apply detailsText
+      if (detailsText) {
+        this.detailsContainer.innerHTML = detailsText;
+        this.detailsContainer.classList.remove("hidden");
+      } else {
+        this.detailsContainer.innerHTML = "";
+        this.detailsContainer.classList.add("hidden");
+      }
+
       if (requirementsText) {
         this.requirementsText.innerHTML = requirementsText;
         this.requirementsContainer.classList.remove("hidden");
@@ -317,7 +194,7 @@ class EtfiToolTipType {
         this.requirementsContainer.classList.add("hidden");
       }
 
-      // --- Small fix: clear gemsContainer so it doesn’t stack icons on repeated updates ---
+      // NEW: Small fix | clear gemsContainer so it doesn’t stack icons on repeated updates
       while (this.gemsContainer.hasChildNodes()) {
         this.gemsContainer.removeChild(this.gemsContainer.lastChild);
       }
@@ -330,12 +207,161 @@ class EtfiToolTipType {
         this.gemsContainer.appendChild(recommendationTooltipContent);
       }
       this.gemsContainer.classList.toggle("hidden", !recommendations);
-
-      // === ETFI: Granary-specific extra info ===
-      // Only run on town focus items, and only for LOC_PROJECT_TOWN_GRANARY_NAME
-      if (IsElement(this.target, "town-focus-chooser-item")) {
-        renderGranaryBlock(this, city);
+    }
+    // NEW: central dispatcher for ETFI details text
+    getDetailsText(city) {
+      if (!this.target) return void 0;
+      if (!IsElement(this.target, "town-focus-chooser-item")) {
+        return void 0;
       }
+      const projectType = this.getProjectType() ?? -1;
+      if (projectType < 0) return void 0;
+      const project = GameInfo.Projects.lookup(projectType);
+      if (!project) return void 0;
+
+      const projectNameKey = project.Name; // e.g. "LOC_PROJECT_TOWN_GRANARY_NAME"
+      if (!projectNameKey) return void 0;
+
+      switch (projectNameKey) {
+        case "LOC_PROJECT_TOWN_GRANARY_NAME":
+          // Farming / Granary town details
+          return this.getGranaryDetailsHTML(city);
+
+        case "LOC_PROJECT_TOWN_FISHING_NAME":
+          // Fishing town details
+          return this.getFishingDetailsHTML(city);
+
+        case "LOC_PROJECT_TOWN_PRODUCTION_NAME":
+          // Mining / Production town details
+          return this.getMiningDetailsHTML(city);
+
+        default:
+          // Any other project: vanilla tooltip only
+          return void 0;
+      }
+    }
+    // NEW:
+    getImprovementSummaryForSet(city, targetSet) {
+      if (!city || !city.Constructibles) return null;
+      if (!(targetSet instanceof Set) || targetSet.size === 0) return null;
+    
+      const resultByType = Object.create(null);
+      const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
+    
+      for (const instanceId of improvements) {
+        const instance = Constructibles.get(instanceId);
+        if (!instance) continue;
+    
+        const location = instance.location;
+        if (!location || location.x == null || location.y == null) continue;
+    
+        // Using free constructible so we respect warehouse bonuses etc.
+        const fcID = Districts.getFreeConstructible(
+          location,
+          GameContext.localPlayerID
+        );
+        const info = GameInfo.Constructibles.lookup(fcID);
+        if (!info) continue;
+    
+        const ctype = info.ConstructibleType;
+        if (!targetSet.has(ctype)) continue;
+    
+        if (!resultByType[ctype]) {
+          const nameKey =
+            ETFI_IMPROVEMENTS.displayNames[ctype] || info.Name || ctype;
+          resultByType[ctype] = {
+            type: ctype,
+            displayName: Locale.compose(nameKey),
+            count: 0,
+          };
+        }
+    
+        resultByType[ctype].count += 1;
+      }
+    
+      const items = Object.values(resultByType);
+      if (!items.length) return null;
+    
+      // Base total = number of qualifying improvements
+      const baseTotal = items.reduce((sum, item) => sum + item.count, 0);
+    
+      // Era-based multiplier (same pattern as your earlier code)
+      let multiplier = 1;
+      const ageData = GameInfo.Ages.lookup(Game.age);
+      if (ageData) {
+        const ageType = (ageData.AgeType || "").trim();
+        if (ageType === "AGE_EXPLORATION") {
+          multiplier += 1;
+        } else if (ageType === "AGE_MODERN") {
+          multiplier += 2;
+        }
+      }
+    
+      const total = baseTotal * multiplier;
+    
+      return { items, total, multiplier };
+    }
+    // NEW:
+    renderImprovementDetailsHTML(summary, yieldIconId) {
+      if (!summary) return void 0;
+
+      const { items, total, multiplier } = summary;
+    
+      let html = `
+        <div class="flex flex-col w-full">
+          <div class="flex items-center gap-2 text-accent-2 mb-1">
+            <fxs-icon data-icon-id="${yieldIconId}" class="size-5"></fxs-icon>
+            <span class="font-semibold">+${total}</span>
+          </div>
+      `;
+    
+      // Breakdown per improvement type
+      html += `<div class="mt-1 text-xs text-accent-2">`;
+      for (const item of items) {
+        html += `
+          <div class="flex justify-between">
+            <span>${item.displayName}</span>
+            <span>+${item.count}</span>
+          </div>
+        `;
+      }
+      html += `</div>`;
+    
+      // Era multiplier line if > 1
+      if (multiplier > 1) {
+        html += `
+          <div class="flex justify-between mt-1 pt-1 border-t border-white/10 text-xs text-accent-2">
+            <span>${Locale.compose("LOC_MOD_ETFI_ERA_BONUS")}</span>
+            <span>x${multiplier}</span>
+          </div>
+        `;
+      }
+    
+      html += `</div>`;
+      return html;
+    }
+    // NEW: 
+    getGranaryDetailsHTML(city) {
+      const summary = this.getImprovementSummaryForSet(
+        city, ETFI_IMPROVEMENTS.sets.food
+      );
+      if (!summary) return void 0;
+    
+      return this.renderImprovementDetailsHTML(summary, "YIELD_FOOD");
+    }
+    // NEW:
+    getFishingDetailsHTML(city) {
+      const summary = this.getImprovementSummaryForSet(
+        city, ETFI_IMPROVEMENTS.sets.food
+      );
+      if (!summary) return void 0;
+    
+      return this.renderImprovementDetailsHTML(summary, "YIELD_FOOD");
+    }
+    // NEW:
+    getMiningDetailsHTML(city, project) {
+      // TODO: implement MiningTown logic here
+      return void 0;
     }
     getRequirementsText() {
       const projectType = this.getProjectType() ?? -1;
@@ -358,6 +384,7 @@ class EtfiToolTipType {
       return !this.target;
     }
 }
+// #endregion
 
 // IMPORTANT: this overrides the existing handler for *only* this tooltip type.
 TooltipManager.registerType("production-project-tooltip", new EtfiToolTipType());
