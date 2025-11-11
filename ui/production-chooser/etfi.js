@@ -5,6 +5,12 @@ import { c as GetTownFocusBlp } from '/base-standard/ui/production-chooser/produ
 import { A as AdvisorUtilities } from '/base-standard/ui/tutorial/tutorial-support.chunk.js';
 
 // #region Localization constants
+const ETFI_PROJECT_TYPES = {
+  TOWN_FARMING:"LOC_PROJECT_TOWN_GRANARY_NAME",
+  TOWN_FISHING: "LOC_PROJECT_TOWN_FISHING_NAME",
+  TOWN_MINING: "LOC_PROJECT_TOWN_PRODUCTION_NAME"
+};
+
 const ETFI_IMPROVEMENTS = {
   displayNames: {
     IMPROVEMENT_WOODCUTTER: "LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER",
@@ -39,6 +45,10 @@ const ETFI_IMPROVEMENTS = {
     ]),
   },
 };
+
+// #region Helpers
+
+// #endregion
 
 // #region EtfiToolTipType
 const bulletChar = String.fromCodePoint(8226);
@@ -219,15 +229,15 @@ class EtfiToolTipType {
       if (!projectNameKey) return void 0;
 
       switch (projectNameKey) {
-        case "LOC_PROJECT_TOWN_GRANARY_NAME":
+        case ETFI_PROJECT_TYPES.TOWN_FARMING:
           // Farming / Granary town details
           return this.getGranaryDetailsHTML(city);
 
-        case "LOC_PROJECT_TOWN_FISHING_NAME":
+        case ETFI_PROJECT_TYPES.TOWN_FISHING:
           // Fishing town details
           return this.getFishingDetailsHTML(city);
 
-        case "LOC_PROJECT_TOWN_PRODUCTION_NAME":
+        case ETFI_PROJECT_TYPES.TOWN_MINING:
           // Mining / Production town details
           return this.getMiningDetailsHTML(city);
 
@@ -237,7 +247,7 @@ class EtfiToolTipType {
       }
     }
     // NEW:
-    getImprovementSummaryForSet(city, targetSet) {
+    getImprovementSummaryForSet(city, targetSet, baseMultiplier = 1) {
       if (!city || !city.Constructibles) return null;
       if (!(targetSet instanceof Set) || targetSet.size === 0) return null;
     
@@ -281,7 +291,7 @@ class EtfiToolTipType {
       const baseTotal = items.reduce((sum, item) => sum + item.count, 0);
     
       // Era-based multiplier (same pattern as your earlier code)
-      let multiplier = 1;
+      let multiplier = baseMultiplier;
       const ageData = GameInfo.Ages.lookup(Game.age);
       if (ageData) {
         const ageType = (ageData.AgeType || "").trim();
@@ -352,8 +362,12 @@ class EtfiToolTipType {
     }
     // NEW:
     getMiningDetailsHTML(city, project) {
-      // TODO: implement MiningTown logic here
-      return void 0;
+      const summary = this.getImprovementSummaryForSet(
+        city, ETFI_IMPROVEMENTS.sets.production, 2                                   
+      );
+      if (!summary) return void 0;
+    
+      return this.renderImprovementDetailsHTML(summary, "YIELD_PRODUCTION");
     }
     getRequirementsText() {
       const projectType = this.getProjectType() ?? -1;
