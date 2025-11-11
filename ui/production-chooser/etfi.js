@@ -13,11 +13,15 @@ import { A as AdvisorUtilities } from '/base-standard/ui/tutorial/tutorial-suppo
 const ETFI_PROJECT_TYPES = {
   TOWN_FARMING:"LOC_PROJECT_TOWN_GRANARY_NAME",
   TOWN_FISHING: "LOC_PROJECT_TOWN_FISHING_NAME",
-  TOWN_MINING: "LOC_PROJECT_TOWN_PRODUCTION_NAME"
+  TOWN_MINING: "LOC_PROJECT_TOWN_PRODUCTION_NAME",
+  TOWN_HUB: "LOC_PROJECT_TOWN_INN_NAME",
+  TOWN_TRADE: "LOC_PROJECT_TOWN_TRADE_NAME"
 };
 const ETFI_YIELDS = {
   FOOD: "YIELD_FOOD",
-  PRODUCTION: "YIELD_PRODUCTION"
+  PRODUCTION: "YIELD_PRODUCTION",
+  INFLUENCE: "YIELD_DIPLOMACY",
+  HAPPINESS: "YIELD_HAPPINESS"
 };
 
 const ETFI_IMPROVEMENTS = {
@@ -248,19 +252,21 @@ class EtfiToolTipType {
 
       switch (projectNameKey) {
         case ETFI_PROJECT_TYPES.TOWN_FARMING:
-          // Farming / Granary town details
           return this.getGranaryDetailsHTML(city);
 
         case ETFI_PROJECT_TYPES.TOWN_FISHING:
-          // Fishing town details
           return this.getFishingDetailsHTML(city);
 
         case ETFI_PROJECT_TYPES.TOWN_MINING:
-          // Mining / Production town details
           return this.getMiningDetailsHTML(city);
+        
+        case ETFI_PROJECT_TYPES.TOWN_HUB:
+          return this.getInnDetailsHTML(city);
+        
+        case ETFI_PROJECT_TYPES.TOWN_TRADE:
+          return this.getTradeDetailsHTML(city);
 
         default:
-          // Any other project: vanilla tooltip only
           return void 0;
       }
     }
@@ -374,6 +380,87 @@ class EtfiToolTipType {
       if (!summary) return void 0;
     
       return this.renderImprovementDetailsHTML(summary, ETFI_YIELDS.PRODUCTION);
+    }
+    // NEW:
+    getInnDetailsHTML(city) {
+      if (!city || typeof city.getConnectedCities !== "function") return void 0;
+
+      const connectedIds = city.getConnectedCities();
+      if (!connectedIds || !connectedIds.length) {
+        // You *could* still show +0 here if you want, but returning void 0 falls back to vanilla.
+        return void 0;
+      }
+    
+      const towns = [];
+      const citiesList = [];
+    
+      for (const id of connectedIds) {
+        const settlement = Cities.get(id);
+        if (!settlement) continue;
+    
+        const name = Locale.compose(settlement.name);
+        if (settlement.isTown) {
+          towns.push(name);
+        } else {
+          citiesList.push(name);
+        }
+      }
+    
+      const totalConnections = towns.length + citiesList.length;
+    
+      // Build localized labels (using your v1 keys)
+      const labelConnections = Locale.compose("LOC_MOD_ETFI_TRADE_CONNECTIONS");
+      const labelCities      = Locale.compose("LOC_MOD_ETFI_CONNECTED_CITIES");
+      const labelTowns       = Locale.compose("LOC_MOD_ETFI_CONNECTED_TOWNS");
+    
+      let html = `
+        <div class="flex flex-col w-full">
+          <div class="flex items-center gap-2 text-accent-2 mb-1">
+            <fxs-icon data-icon-id="${ETFI_YIELDS.INFLUENCE}" class="size-5"></fxs-icon>
+            <span class="font-semibold">+${totalConnections}</span>
+          </div>
+
+          <div class="mt-1 text-xs text-accent-2">
+            <div class="mb-1">${labelConnections}</div>
+
+            <div class="flex justify-between">
+            <span>${labelCities}</span>
+            <span>${citiesList.length}</span>
+          </div>
+      `;
+
+      if (citiesList.length) {
+        html += `
+          <div class="ml-3 opacity-80">
+            ${citiesList.join(", ")}
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="flex justify-between mt-1">
+          <span>${labelTowns}</span>
+          <span>${towns.length}</span>
+        </div>
+      `;
+
+      if (towns.length) {
+        html += `
+          <div class="ml-3 opacity-80">
+            ${towns.join(", ")}
+          </div>
+        `;
+      }
+
+      html += `
+        </div>
+        </div>
+      `;
+      
+      return html;
+    }
+    getTradeDetailsHTML(city){
+
     }
     getRequirementsText() {
       const projectType = this.getProjectType() ?? -1;
