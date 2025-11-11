@@ -47,7 +47,19 @@ const ETFI_IMPROVEMENTS = {
 };
 
 // #region Helpers
+function getEraMultiplier(base = 1) {
+  let multiplier = base;
+  const ageData = GameInfo.Ages.lookup(Game.age);
+  if (!ageData) return multiplier;
 
+  const ageType = (ageData.AgeType || "").trim();
+  if (ageType === "AGE_EXPLORATION") {
+    multiplier += 1;
+  } else if (ageType === "AGE_MODERN") {
+    multiplier += 2;
+  }
+  return multiplier;
+}
 // #endregion
 
 // #region EtfiToolTipType
@@ -155,7 +167,7 @@ class EtfiToolTipType {
       if (!city) { return; }
       const name = this.target.dataset.name ?? "";
       const description = (this.target.dataset.tooltipDescription || this.target.dataset.description) ?? "";
-      const detailsText = this.getDetailsText(city);   // NEW: project-specific ETFI data
+      const detailsText = IsElement(this.target, "town-focus-chooser-item") ? this.getDetailsText(city) : void 0;   // NEW: project-specific ETFI data
       const growthType = Number(this.target.dataset.growthType);
       const productionCost = projectType ? city.Production?.getProjectProductionCost(projectType) : -1;
       const requirementsText = this.getRequirementsText();
@@ -287,21 +299,8 @@ class EtfiToolTipType {
       const items = Object.values(resultByType);
       if (!items.length) return null;
     
-      // Base total = number of qualifying improvements
       const baseTotal = items.reduce((sum, item) => sum + item.count, 0);
-    
-      // Era-based multiplier (same pattern as your earlier code)
-      let multiplier = baseMultiplier;
-      const ageData = GameInfo.Ages.lookup(Game.age);
-      if (ageData) {
-        const ageType = (ageData.AgeType || "").trim();
-        if (ageType === "AGE_EXPLORATION") {
-          multiplier += 1;
-        } else if (ageType === "AGE_MODERN") {
-          multiplier += 2;
-        }
-      }
-    
+      const multiplier = getEraMultiplier(baseMultiplier);
       const total = baseTotal * multiplier;
     
       return { items, total, multiplier };
