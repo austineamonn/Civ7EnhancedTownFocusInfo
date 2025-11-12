@@ -10,6 +10,11 @@ import { c as GetTownFocusBlp } from '/base-standard/ui/production-chooser/produ
 import { A as AdvisorUtilities } from '/base-standard/ui/tutorial/tutorial-support.chunk.js';
 
 // #region Localization constants
+const ETFI_ICONS = {
+  CITY: "CITY_URBAN",
+  TOWN: "CITY_RURAL"
+};
+
 const ETFI_PROJECT_TYPES = {
   TOWN_FARMING:"LOC_PROJECT_TOWN_GRANARY_NAME",
   TOWN_FISHING: "LOC_PROJECT_TOWN_FISHING_NAME",
@@ -19,6 +24,7 @@ const ETFI_PROJECT_TYPES = {
   TOWN_RESORT: "LOC_PROJECT_TOWN_RESORT_NAME",
   TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME"
 };
+
 const ETFI_YIELDS = {
   FOOD: "YIELD_FOOD",
   PRODUCTION: "YIELD_PRODUCTION",
@@ -422,10 +428,9 @@ class EtfiToolTipType {
     // NEW:
     getInnDetailsHTML(city) {
       if (!city || typeof city.getConnectedCities !== "function") return void 0;
-
+    
       const connectedIds = city.getConnectedCities();
       if (!connectedIds || !connectedIds.length) {
-        // You *could* still show +0 here if you want, but returning void 0 falls back to vanilla.
         return void 0;
       }
     
@@ -446,10 +451,8 @@ class EtfiToolTipType {
     
       const totalConnections = towns.length + citiesList.length;
     
-      // Build localized labels (using your v1 keys)
-      const labelConnections = Locale.compose("LOC_MOD_ETFI_TRADE_CONNECTIONS");
-      const labelCities      = Locale.compose("LOC_MOD_ETFI_CONNECTED_CITIES");
-      const labelTowns       = Locale.compose("LOC_MOD_ETFI_CONNECTED_TOWNS");
+      const labelCities = Locale.compose("LOC_MOD_ETFI_CONNECTED_CITIES");
+      const labelTowns  = Locale.compose("LOC_MOD_ETFI_CONNECTED_TOWNS");
     
       let html = `
         <div class="flex flex-col w-full">
@@ -460,47 +463,61 @@ class EtfiToolTipType {
             <fxs-icon data-icon-id="${ETFI_YIELDS.INFLUENCE}" class="size-5"></fxs-icon>
             <span class="font-semibold">+${totalConnections}</span>
           </div>
-
+    
           <div 
             class="mt-1 text-accent-2"
             style="font-size: 0.8em; line-height: 1.4;"
           >
-            <div class="mb-1">${labelConnections}</div>
-
-            <div class="flex justify-between">
-            <span>${labelCities}</span>
-            <span>${citiesList.length}</span>
-          </div>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <fxs-icon data-icon-id="${ETFI_ICONS.CITY}" class="size-4"></fxs-icon>
+                <span class="opacity-60">| </span>
+                <span>${labelCities}</span>
+                <span class="opacity-70 ml-1">x${citiesList.length}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <fxs-icon data-icon-id="${ETFI_YIELDS.INFLUENCE}" class="size-4"></fxs-icon>
+                <span class="font-semibold">+${citiesList.length}</span>
+              </div>
+            </div>
       `;
-
+    
       if (citiesList.length) {
         html += `
-          <div class="ml-3 opacity-80">
-            ${citiesList.join(", ")}
-          </div>
+            <div class="ml-6 opacity-80" style="font-size: 0.8em;">
+              ${citiesList.join(" • ")}
+            </div>
         `;
       }
-
+    
       html += `
-        <div class="flex justify-between mt-1">
-          <span>${labelTowns}</span>
-          <span>${towns.length}</span>
-        </div>
+            <div class="flex justify-between items-center mt-1">
+              <div class="flex items-center gap-2">
+                <fxs-icon data-icon-id="${ETFI_ICONS.TOWN}" class="size-4"></fxs-icon>
+                <span class="opacity-60">| </span>
+                <span>${labelTowns}</span>
+                <span class="opacity-70 ml-1">x${towns.length}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <fxs-icon data-icon-id="${ETFI_YIELDS.INFLUENCE}" class="size-4"></fxs-icon>
+                <span class="font-semibold">+${towns.length}</span>
+              </div>
+            </div>
       `;
-
+    
       if (towns.length) {
         html += `
-          <div class="ml-3 opacity-80">
-            ${towns.join(", ")}
-          </div>
+            <div class="ml-6 opacity-80" style="font-size: 0.8em;">
+              ${towns.join(" • ")}
+            </div>
         `;
       }
-
+    
       html += `
-        </div>
+          </div>
         </div>
       `;
-      
+    
       return html;
     }
     getTradeDetailsHTML(city){
@@ -594,7 +611,7 @@ class EtfiToolTipType {
           <div class="flex justify-between items-center mt-1">
             <div class="flex items-center gap-2">
               <fxs-icon data-icon-id="${item.iconId}" class="size-5"></fxs-icon>
-              <span class="opacity-60">|</span>
+              <span class="opacity-60">| </span>
               <span>${item.name}</span>
               <span class="opacity-70 ml-1">x${item.count}</span>
             </div>
@@ -606,14 +623,14 @@ class EtfiToolTipType {
         `;
       }
     
-      html += `
-            <div class="flex justify-between mt-2 pt-1 border-t border-white/10">
-              <span>${labelPerResource}</span>
-              <span>x${happinessPerTile}</span>
-            </div>
-          </div>
-        </div>
-      `;
+      // html += `
+      //       <div class="flex justify-between mt-2 pt-1 border-t border-white/10">
+      //         <span>${labelPerResource}</span>
+      //         <span>x${happinessPerTile}</span>
+      //       </div>
+      //     </div>
+      //   </div>
+      // `;
       return html;
     }
     getResortDetailsHTML(city) {
