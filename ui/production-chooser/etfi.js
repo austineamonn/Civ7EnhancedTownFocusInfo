@@ -902,8 +902,115 @@ class EtfiToolTipType {
       html += `</div>`;
       return html;
     }
-    getTempleDetailsHTML(city){
-
+    getTempleDetailsHTML(city) {
+      if (!city || !city.Constructibles || !Constructibles || !GameInfo?.Constructibles) {
+        return void 0;
+      }
+    
+      const constructibles = city.Constructibles;
+      const buildingIds = constructibles.getIdsOfClass("BUILDING") || [];
+    
+      const byTile = Object.create(null);
+      let totalBuildings = 0;
+    
+      for (const instanceId of buildingIds) {
+        const instance = Constructibles.get(instanceId);
+        if (!instance) continue;
+        if (!instance.complete) continue; // only completed buildings
+    
+        const loc = instance.location;
+        if (!loc || loc.x == null || loc.y == null) continue;
+    
+        const info = GameInfo.Constructibles.lookup(instance.type);
+        if (!info) continue;
+    
+        const key = `${loc.x},${loc.y}`;
+    
+        if (!byTile[key]) {
+          byTile[key] = {
+            buildings: [], // { iconId, nameKey }
+          };
+        }
+    
+        byTile[key].buildings.push({
+          iconId: info.ConstructibleType,
+          nameKey: info.Name,
+        });
+    
+        totalBuildings += 1;
+      }
+    
+      if (!totalBuildings) return void 0;
+    
+      // === NEW: sort so tiles with 2+ buildings come first ===
+      const stacks = Object.values(byTile).sort(
+        (a, b) => b.buildings.length - a.buildings.length
+      );
+      if (!stacks.length) return void 0;
+    
+      const bullet = "•";
+    
+      // Header: +1 Happiness per building in this town
+      let html = `
+        <div class="flex flex-col w-full">
+          <div
+            class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2"
+            style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
+          >
+            <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-5"></fxs-icon>
+            <span class="font-semibold">+${totalBuildings}</span>
+          </div>
+    
+          <div
+            class="mt-1 text-accent-2"
+            style="font-size: 0.8em; line-height: 1.4;"
+          >
+      `;
+    
+      for (const stack of stacks) {
+        const buildingsOnTile = stack.buildings || [];
+        const bonus = buildingsOnTile.length; // +1 Happiness per building
+    
+        // Build "icon | name • icon | name • icon | name"
+        let buildingsHtml = "";
+        for (let i = 0; i < buildingsOnTile.length; i++) {
+          const b = buildingsOnTile[i];
+          const name = Locale.compose(b.nameKey);
+    
+          if (i > 0) {
+            buildingsHtml += `
+              <span class="mx-1">${bullet}</span>
+            `;
+          }
+    
+          buildingsHtml += `
+            <span class="inline-flex items-center gap-2 whitespace-nowrap">
+              <fxs-icon data-icon-id="${b.iconId}" class="size-5"></fxs-icon>
+              <span class="opacity-60">| </span>
+              <span>${name}</span>
+            </span>
+          `;
+        }
+    
+        html += `
+          <div class="flex justify-between items-center mt-1">
+            <div class="flex items-center gap-2 min-w-0">
+              ${buildingsHtml}
+            </div>
+            <div class="flex items-center gap-1 ml-3">
+              <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
+              <span class="font-semibold">+${bonus}</span>
+            </div>
+          </div>
+        `;
+      }
+    
+      html += `
+          </div>
+        </div>
+      `;
+    
+      return html;
     }
     getRequirementsText() {
       const projectType = this.getProjectType() ?? -1;
