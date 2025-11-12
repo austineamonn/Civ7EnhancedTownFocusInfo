@@ -15,13 +15,17 @@ const ETFI_PROJECT_TYPES = {
   TOWN_FISHING: "LOC_PROJECT_TOWN_FISHING_NAME",
   TOWN_MINING: "LOC_PROJECT_TOWN_PRODUCTION_NAME",
   TOWN_HUB: "LOC_PROJECT_TOWN_INN_NAME",
-  TOWN_TRADE: "LOC_PROJECT_TOWN_TRADE_NAME"
+  TOWN_TRADE: "LOC_PROJECT_TOWN_TRADE_NAME",
+  TOWN_RESORT: "LOC_PROJECT_TOWN_RESORT_NAME"
 };
 const ETFI_YIELDS = {
   FOOD: "YIELD_FOOD",
   PRODUCTION: "YIELD_PRODUCTION",
   INFLUENCE: "YIELD_DIPLOMACY",
-  HAPPINESS: "YIELD_HAPPINESS"
+  HAPPINESS: "YIELD_HAPPINESS",
+  GOLD: "YIELD_GOLD",
+  SCIENCE: "YIELD_SCIENCE",
+  CULTURE: "YIELD_CULTURE"
 };
 
 const ETFI_IMPROVEMENTS = {
@@ -265,6 +269,9 @@ class EtfiToolTipType {
         
         case ETFI_PROJECT_TYPES.TOWN_TRADE:
           return this.getTradeDetailsHTML(city);
+
+        case ETFI_PROJECT_TYPES.TOWN_RESORT:
+          return this.getResortDetailsHTML(city);
 
         default:
           return void 0;
@@ -603,6 +610,269 @@ class EtfiToolTipType {
           </div>
         </div>
       `;
+      return html;
+    }
+    // NEW: 
+    getResortDetailsHTML(city) {
+      if (!city || !city.Constructibles || !GameplayMap || !GameInfo?.Constructibles || !GameInfo?.Features || !GameInfo?.Yields) {
+        return void 0;
+      }
+
+      const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
+      if (!improvements.length) return void 0;
+
+      const multiplier = getEraMultiplier(); // +1/+2/+3 per Age
+
+      const improvementBuckets = Object.create(null); // non-wonder tiles, grouped by improvement
+      const wonderBuckets = Object.create(null);      // wonder tiles, grouped by wonder name
+      const wonderYieldsByName = new Map();          // name -> Map(yieldType -> base tile yield)
+      const naturalWonderYields = new Map();         // total base yields from all wonders
+
+      let qualifyingTileCount = 0; // rural tiles with ≥1 Happiness
+      let nwHappyTiles = 0;        // happy tiles that are also natural wonders
+
+      for (const instanceId of improvements) {
+        const instance = Constructibles.get(instanceId);
+        if (!instance) continue;
+
+        const loc = instance.location;
+        if (!loc || loc.x == null || loc.y == null) continue;
+        const { x, y } = loc;
+
+        const happy = GameplayMap.getYield(
+          x,
+          y,
+          typeof HAPPINESS_YIELD !== "undefined"
+            ? HAPPINESS_YIELD
+            : ETFI_YIELDS.HAPPINESS,
+          GameContext.localPlayerID
+        );
+
+        const isNW = GameplayMap.isNaturalWonder(x, y);
+
+        // ── Natural Wonder bookkeeping ───────────────────────────────────────
+        if (isNW) {
+          const fType = GameplayMap.getFeatureType(x, y);
+          const fInfo = GameInfo.Features.lookup(fType);
+          const wonderName = Locale.compose(fInfo?.Name) || "Natural Wonder";
+          // Use the *improvement's* constructible as the icon, falling back to feature
+          const cinfo = GameInfo.Constructibles.lookup(instance.type);
+          const ctype = cinfo?.ConstructibleType;
+          const iconId = ctype || fInfo?.FeatureType; 
+          const wKey = wonderName;
+
+          // Count tiles per wonder
+          let wb = wonderBuckets[wKey];
+          if (!wb) {
+            wb = { key: wKey, name: wonderName, count: 0, iconId };
+            wonderBuckets[wKey] = wb;
+          }
+          wb.count += 1;
+
+          // Per-wonder yields map
+          let perWonder = wonderYieldsByName.get(wKey);
+          if (!perWonder) {
+            perWonder = new Map();
+            wonderYieldsByName.set(wKey, perWonder);
+          }
+
+          // Sum base tile yields on this wonder
+          for (const yInfo of GameInfo.Yields) {
+            const yAmount = GameplayMap.getYield(
+              x,
+              y,
+              yInfo.YieldType,
+              GameContext.localPlayerID
+            );
+            if (yAmount > 0) {
+              naturalWonderYields.set(
+                yInfo.YieldType,
+                (naturalWonderYields.get(yInfo.YieldType) || 0) + yAmount
+              );
+              perWonder.set(
+                yInfo.YieldType,
+                (perWonder.get(yInfo.YieldType) || 0) + yAmount
+              );
+            }
+          }
+
+          if (happy > 0) {
+            nwHappyTiles += 1;
+          }
+        }
+
+        // ── Tiles with ≥1 Happiness: Resort per-age bonus ───────────────────
+        if (happy > 0) {
+          qualifyingTileCount += 1;
+
+          // Only show **non-wonder** tiles as normal improvements
+          if (!isNW) {
+            const cinfo = GameInfo.Constructibles.lookup(instance.type);
+            const ctype = cinfo?.ConstructibleType;
+            const displayKey =
+              ETFI_IMPROVEMENTS.displayNames[ctype] || cinfo?.Name || ctype || "LOC_UNKNOWN";
+
+            let bucket = improvementBuckets[displayKey];
+            if (!bucket) {
+              bucket = {
+                key: displayKey,
+                iconId: ctype,
+                displayName: Locale.compose(displayKey),
+                count: 0,
+              };
+              improvementBuckets[displayKey] = bucket;
+            }
+            bucket.count += 1;
+          }
+        }
+      }
+
+      const improvementItems = Object.values(improvementBuckets);
+      const wonderItems = Object.values(wonderBuckets);
+
+      if (!qualifyingTileCount && !wonderItems.length) {
+        return void 0;
+      }
+
+      // ── Era-scaled totals for Happiness & Gold (same logic as original) ──
+      const baseNW = nwHappyTiles * multiplier;
+      const getNW = (yieldType) => naturalWonderYields.get(yieldType) || 0;
+
+      const totalHappiness =
+        qualifyingTileCount * multiplier +
+        0.5 * (getNW(ETFI_YIELDS.HAPPINESS) + baseNW);
+
+      const totalGold =
+        qualifyingTileCount * multiplier +
+        0.5 * (getNW(ETFI_YIELDS.GOLD) + baseNW);
+
+      // ── Extra header yields from natural wonders (Food/Prod/Science/Culture/…) ─
+      const extraHeaderYields = [];
+      for (const [yieldType, baseAmount] of naturalWonderYields.entries()) {
+        if (
+          yieldType === ETFI_YIELDS.HAPPINESS ||
+          yieldType === ETFI_YIELDS.GOLD
+        ) {
+          continue; // those are already folded into totalHappiness / totalGold
+        }
+        const bonus = baseAmount * 0.5; // +50% from Resort effect
+        if (bonus > 0) {
+          extraHeaderYields.push({ yieldType, bonus });
+        }
+      }
+
+      // ── HEADER: better spacing between yield blocks ───────────────────────
+      let headerYieldsHtml = `
+        <div class="flex items-center gap-2 mr-2">
+          <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-5"></fxs-icon>
+          <span class="font-semibold">+${totalHappiness}</span>
+        </div>
+        <div class="flex items-center gap-2 mr-2">
+          <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-5"></fxs-icon>
+          <span class="font-semibold">+${totalGold}</span>
+        </div>
+      `;
+
+      for (const item of extraHeaderYields) {
+        headerYieldsHtml += `
+          <div class="flex items-center gap-2 mr-2">
+            <fxs-icon data-icon-id="${item.yieldType}" class="size-5"></fxs-icon>
+            <span class="font-semibold">+${item.bonus}</span>
+          </div>
+        `;
+      }
+
+      let html = `
+        <div class="flex flex-col w-full">
+          <div
+            class="flex items-center justify-center gap-4 mb-2 rounded-md px-3 py-2 flex-wrap"
+            style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
+          >
+            ${headerYieldsHtml}
+          </div>
+      `;
+
+      // ── Improvements breakdown (non-wonder tiles with ≥1 Happiness) ───────
+      if (improvementItems.length) {
+        html += `
+          <div
+            class="mt-1 text-accent-2"
+            style="font-size: 0.8em; line-height: 1.4;"
+          >
+        `;
+
+        for (const item of improvementItems) {
+          const perTileBonus = multiplier; // +1/+2/+3 H & G per happy tile
+          const happyBonus = item.count * perTileBonus;
+          const goldBonus = item.count * perTileBonus;
+
+          html += `
+            <div class="flex justify-between items-center mt-1">
+              <div class="flex items-center gap-2">
+                <fxs-icon data-icon-id="${item.iconId}" class="size-5"></fxs-icon>
+                <span class="opacity-60">|</span>
+                <span>${item.displayName}</span>
+                <span class="opacity-70 ml-1">x${item.count}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="flex items-center gap-2">
+                  <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
+                  <span class="font-semibold">+${happyBonus}</span>
+                </span>
+                <span class="flex items-center gap-2">
+                  <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-4"></fxs-icon>
+                  <span class="font-semibold">+${goldBonus}</span>
+                </span>
+              </div>
+            </div>
+          `;
+        }
+
+        html += `</div>`;
+      }
+
+      // ── Natural Wonders: icon | name x count + all +50% yields ────────────
+      if (wonderItems.length) {
+        html += `
+          <div class="mt-2" style="font-size: 0.8em; line-height: 1.4;">
+        `;
+
+        for (const w of wonderItems) {
+          const perMap = wonderYieldsByName.get(w.key);
+          if (!perMap) continue;
+
+          let yieldsHtml = "";
+          for (const [yType, baseAmount] of perMap.entries()) {
+            const bonus = baseAmount * 0.5; // +50% for this wonder
+            if (bonus <= 0) continue;
+
+            yieldsHtml += `
+              <span class="inline-flex items-center gap-2 mr-1">
+                <fxs-icon data-icon-id="${yType}" class="size-4"></fxs-icon>
+                <span>+${bonus}</span>
+              </span>
+            `;
+          }
+
+          html += `
+            <div class="flex justify-between items-center mt-1">
+              <div class="flex items-center gap-2">
+                <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
+                <span class="opacity-60">| </span>
+                <span>${w.key}</span>
+                <span class="opacity-70 ml-1">x${w.count}</span>
+              </div>
+              <div class="flex flex-wrap justify-end">
+                ${yieldsHtml}
+              </div>
+            </div>
+          `;
+        }
+
+        html += `</div>`;
+      }
+
+      html += `</div>`;
       return html;
     }
     getRequirementsText() {
