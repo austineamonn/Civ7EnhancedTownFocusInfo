@@ -292,17 +292,17 @@ class EtfiToolTipType {
       if (!city || !city.Constructibles) return null;
       if (!(targetSet instanceof Set) || targetSet.size === 0) return null;
       if (!GameInfo?.Constructibles || !Districts || !Constructibles) return null;
-    
+
       const resultByDisplayKey = Object.create(null);
       const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
-    
+
       for (const instanceId of improvements) {
         const instance = Constructibles.get(instanceId);
         if (!instance) continue;
-    
+
         const location = instance.location;
         if (!location || location.x == null || location.y == null) continue;
-    
+
         // Using free constructible so we respect warehouse bonuses etc.
         const fcID = Districts.getFreeConstructible(
           location,
@@ -330,25 +330,32 @@ class EtfiToolTipType {
             count: 0,
           };
         }
-    
+
         resultByDisplayKey[displayKey].count += 1;
       }
-    
+
       const items = Object.values(resultByDisplayKey);
       if (!items.length) return null;
-    
+
       const baseTotal = items.reduce((sum, item) => sum + item.count, 0);
       const multiplier = getEraMultiplier(baseMultiplier);
       const total = baseTotal * multiplier;
-    
-      return { items, total, multiplier };
+
+      return { items, total, multiplier, baseCount: baseTotal };
     }
     // NEW:
     renderImprovementDetailsHTML(summary, yieldIconId) {
       if (!summary) return void 0;
 
-      const { items, total, multiplier } = summary;
-    
+      const { items, total, multiplier, baseCount } = summary;
+
+      // Localized (with safe fallback) label for "Total Improvements"
+      const rawLabelTI = typeof Locale?.compose === "function"
+        ? Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS")
+        : null;
+      const labelTotalImprovements =
+        rawLabelTI && !/^LOC_/.test(rawLabelTI) ? rawLabelTI : "Total Improvements";
+
       let html = `
         <div class="flex flex-col w-full">
           <div             
@@ -359,13 +366,20 @@ class EtfiToolTipType {
             <span class="font-semibold">+${total}</span>
           </div>
       `;
-    
-      // Breakdown per improvement type
+
+      // Breakdown per improvement type (+ new Total Improvements row)
       html += `
       <div 
         class="mt-1 text-accent-2"
         style="font-size: 0.8em; line-height: 1.4;"
-      >`;
+      >
+        <div class="flex justify-between mb-1">
+          <span>${labelTotalImprovements}</span>
+          <span>${(typeof baseCount === "number" ? baseCount : Math.round(total / (multiplier || 1)))}</span>
+        </div>
+        <div class="mt-1 border-t border-white/10"></div>
+      `;
+
       for (const item of items) {
         const perImprovementYield = item.count * multiplier;
         html += `
@@ -384,17 +398,7 @@ class EtfiToolTipType {
         `;
       }
       html += `</div>`;
-    
-      // html += `
-      //   <div 
-      //     class="flex justify-between mt-1 pt-1 border-t border-white/10text-accent-2"
-      //     style="font-size: 0.8em; line-height: 1.4;"
-      //   >
-      //     <span>${Locale.compose("LOC_MOD_ETFI_ERA_BONUS")}</span>
-      //     <span>x${multiplier}</span>
-      //   </div>
-      // `;
-    
+
       html += `</div>`;
       return html;
     }
