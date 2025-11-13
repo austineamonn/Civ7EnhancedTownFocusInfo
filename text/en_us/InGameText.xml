@@ -32,5 +32,8 @@
     <Replace Tag="LOC_MOD_ETFI_TOTAL_CONNECTIONS"><Text>Total Connections</Text></Replace>
     <Replace Tag="LOC_MOD_ETFI_TOTAL_BUILDINGS"><Text>Total Buildings</Text></Replace>
     <Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS"><Text>Total Settlements</Text></Replace>
+
+    <!-- Label Titles -->
+    <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER"><Text>Natural Wonder</Text></Replace>
   </EnglishText>
 </Database>

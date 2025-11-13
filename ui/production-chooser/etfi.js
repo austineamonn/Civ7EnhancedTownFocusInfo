@@ -795,6 +795,8 @@ class EtfiToolTipType {
       // --- Inserted: label and base-count for improvements ---
       const labelTotalImprovements = Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS");
       const baseTotalImprovements = improvementItems.reduce((sum, it) => sum + (it.count || 0), 0);
+      const totalWonderTiles = wonderItems.reduce((sum, w) => sum + (w.count || 0), 0);
+      const baseTotalAllTiles = baseTotalImprovements + totalWonderTiles;
 
       let headerYieldsHtml = "";
       for (const yType of headerOrder) {
@@ -828,7 +830,7 @@ class EtfiToolTipType {
         >
           <div class="flex justify-between mb-1">
             <span>${labelTotalImprovements}</span>
-            <span>${baseTotalImprovements}</span>
+            <span>${baseTotalAllTiles}</span>
           </div>
           <div class="mt-1 border-t border-white/10"></div>
       `;
@@ -871,36 +873,32 @@ class EtfiToolTipType {
 
       // ── Natural Wonders breakdown: icon | name x count + all extra yields ────
       if (wonderItems.length) {
+        const labelNaturalWonder =
+          Locale.compose("LOC_MOD_ETFI_NATURAL_WONDER") || "Natural Wonder";
+      
         html += `
           <div class="mt-2" style="font-size: 0.8em; line-height: 1.4;">
         `;
-
+      
         for (const w of wonderItems) {
           const yields = w.yields || {};
           let yieldsHtml = "";
-
-          // Desired order: Happiness, Gold, then all other yields
-          const primaryOrder = [
-            ETFI_YIELDS.HAPPINESS,
-            ETFI_YIELDS.GOLD,
-          ];
-
+      
+          // Order: Happiness, Gold, then all others
+          const primaryOrder = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
           const secondaryOrder = [];
           for (const yInfo of GameInfo.Yields) {
             const yType = yInfo.YieldType;
-            if (primaryOrder.indexOf(yType) !== -1) continue; // already handled
+            if (primaryOrder.indexOf(yType) !== -1) continue;
             secondaryOrder.push(yType);
           }
-
           const orderedYields = primaryOrder.concat(secondaryOrder);
-
+      
           for (const yType of orderedYields) {
             const val = yields[yType];
             if (!val) continue;
-
             const displayVal =
               Math.abs(val - Math.round(val)) < 1e-6 ? Math.round(val) : val.toFixed(1);
-
             yieldsHtml += `
               <span class="inline-flex items-center gap-2 mr-1">
                 <fxs-icon data-icon-id="${yType}" class="size-4"></fxs-icon>
@@ -908,22 +906,31 @@ class EtfiToolTipType {
               </span>
             `;
           }
-
+      
           html += `
-            <div class="flex justify-between items-center mt-1">
-              <div class="flex items-center gap-2">
-                <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
-                <span class="opacity-60">| </span>
-                <span>${w.key}</span>
-                <span class="opacity-70 ml-1">x${w.count}</span>
+            <div class="mt-2">
+              <!-- Label on its own line -->
+              <div class="text-white/90" style="font-size: 0.75em;">
+                ${labelNaturalWonder}
               </div>
-              <div class="flex flex-wrap justify-end">
-                ${yieldsHtml}
+              <!-- Divider -->
+              <div class="mt-1 mb-1 border-t border-white/10"></div>
+      
+              <!-- Improvement details row -->
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                  <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
+                  <span class="opacity-60">| </span>
+                  <span>${w.key}</span>
+                  <span class="opacity-70 ml-1">x${w.count}</span>
+                </div>
+                <div class="flex flex-wrap justify-end">
+                  ${yieldsHtml}
+                </div>
               </div>
             </div>
           `;
         }
-
         html += `</div>`;
       }
 
