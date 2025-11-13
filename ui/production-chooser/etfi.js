@@ -620,7 +620,7 @@ class EtfiToolTipType {
       const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
       if (!improvements.length) return null;
 
-      const multiplier = getEraMultiplier(); // +1/+2/+3 per Age
+      const multiplier = getEraMultiplier();
 
       const improvementBuckets = Object.create(null); // non-wonder tiles w/ ≥1 base Happiness
       const wonderBuckets = Object.create(null);      // wonder tiles grouped by wonder name
