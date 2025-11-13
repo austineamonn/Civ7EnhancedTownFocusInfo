@@ -1,74 +1,32 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Database>
-  <LocalizedText>
-    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS" Language="ja_JP">
-      <Text>特殊区画 (+1 ずつ)</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS" Language="ja_JP">
-      <Text>建物区画 (+1 ずつ)</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS" Language="ja_JP">
-      <Text>文明固有の区画</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS" Language="ja_JP">
-      <Text>フルタイル区画</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS" Language="ja_JP">
-      <Text>時代ボーナス</Text>
-    </Replace>
-
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER" Language="ja_JP">
-      <Text>木こり小屋</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE" Language="ja_JP">
-      <Text>鉱山</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT" Language="ja_JP">
-      <Text>漁船</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM" Language="ja_JP">
-      <Text>農場</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE" Language="ja_JP">
-      <Text>牧場</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION" Language="ja_JP">
-      <Text>プランテーション</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP" Language="ja_JP"> 
-      <Text>狩猟キャンプ</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT" Language="ja_JP">
-      <Text>粘土採掘場</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY" Language="ja_JP">
-      <Text>採石場</Text>
-    </Replace>
-
-    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES" Language="ja_JP">
-      <Text>交易路</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS" Language="ja_JP">
-      <Text>接続された居住地</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES" Language="ja_JP">
-      <Text>都市</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS" Language="ja_JP">
-      <Text>町</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION" Language="ja_JP">
-      <Text>接続ごとのボーナス</Text>
-    </Replace>
-
-    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES" Language="ja_JP">
-      <Text>資源の合計</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE" Language="ja_JP">
-      <Text>資源ごとの幸福度</Text>
-    </Replace>
-    <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ja_JP">
-      <Text>資源</Text>
-    </Replace>
-  </LocalizedText>
-</Database>
+<Database><LocalizedText>
+<Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS" Language="ja_JP"><Text>特殊区画</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS" Language="ja_JP"><Text>建物区画</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS" Language="ja_JP"><Text>文明固有の区画</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS" Language="ja_JP"><Text>フルタイル区画</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_ERA_BONUS" Language="ja_JP"><Text>時代ボーナス</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER" Language="ja_JP"><Text>木こり小屋</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE" Language="ja_JP"><Text>鉱山</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT" Language="ja_JP"><Text>漁船</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM" Language="ja_JP"><Text>農場</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE" Language="ja_JP"><Text>牧場</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION" Language="ja_JP"><Text>プランテーション</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP" Language="ja_JP"><Text>狩猟キャンプ</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT" Language="ja_JP"><Text>粘土採掘場</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY" Language="ja_JP"><Text>採石場</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES" Language="ja_JP"><Text>交易路</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS" Language="ja_JP"><Text>接続</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES" Language="ja_JP"><Text>都市</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS" Language="ja_JP"><Text>町</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION" Language="ja_JP"><Text>接続ごとのボーナス</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE" Language="ja_JP"><Text>資源ごとの幸福度</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES" Language="ja_JP"><Text>資源の合計</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TOTAL_IMPROVEMENTS" Language="ja_JP"><Text>改良の合計</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TOTAL_CONNECTIONS" Language="ja_JP"><Text>接続の合計</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TOTAL_BUILDINGS" Language="ja_JP"><Text>建物の合計</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS" Language="ja_JP"><Text>居住地の合計</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER" Language="ja_JP"><Text>自然遺産</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ja_JP"><Text>資源</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="ja_JP"><Text>維持費のある建物</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="ja_JP"><Text>その他の建物</Text></Replace>
+</LocalizedText></Database>
