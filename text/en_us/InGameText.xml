@@ -35,5 +35,7 @@
 
     <!-- Label Titles -->
     <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER"><Text>Natural Wonder</Text></Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE"><Text>Maintenance Buildings</Text></Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE"><Text>Other Buildings</Text></Replace>
   </EnglishText>
 </Database>

@@ -1038,7 +1038,201 @@ class EtfiToolTipType {
       return html;
     }
     getUrbanCenterDetailsHTML(city) {
-      
+      if (!city?.Constructibles || !Constructibles || !GameInfo?.Constructibles || !GameInfo?.Yields) {
+        return null;
+      }
+    
+      const constructibles = city.Constructibles;
+      const buildingIds = constructibles.getIdsOfClass("BUILDING") || [];
+      if (!buildingIds.length) return null;
+    
+      // +100% towards => 50% discount
+      const DISCOUNT = 1 - 1 / (1 + 1.0);
+    
+      // one-decimal, trim trailing .0
+      function fmt1(x) {
+        const v = Math.round(x * 10) / 10;
+        return Math.abs(v - Math.round(v)) < 1e-9 ? String(Math.round(v)) : v.toFixed(1);
+      }
+    
+      const ORDERED_YIELDS = [ETFI_YIELDS.GOLD, ETFI_YIELDS.HAPPINESS];
+    
+      const withMaint = [];
+      const withoutMaint = [];
+      const grandTotals = { [ETFI_YIELDS.GOLD]: 0, [ETFI_YIELDS.HAPPINESS]: 0 };
+    
+      for (const id of buildingIds) {
+        const inst = Constructibles.get(id);
+        if (!inst || !inst.complete) continue;
+    
+        const info = GameInfo.Constructibles.lookup(inst.type);
+        if (!info) continue;
+    
+        const loc = inst.location;
+        if (!loc || loc.x == null || loc.y == null) continue;
+        const quarterKey = `${loc.x},${loc.y}`;
+    
+        const maint = constructibles.getMaintenance(inst.type) || {};
+        let g = 0, h = 0;
+        for (const yi in maint) {
+          const raw = Number(maint[yi]) || 0;
+          if (raw <= 0) continue;
+          const yInfo = GameInfo.Yields[yi];
+          if (!yInfo) continue;
+          const yType = yInfo.YieldType;
+          const saved = raw * DISCOUNT;
+          if (yType === ETFI_YIELDS.GOLD) g += saved;
+          if (yType === ETFI_YIELDS.HAPPINESS) h += saved;
+        }
+    
+        const rec = { quarterKey, iconId: info.ConstructibleType, nameKey: info.Name, g, h };
+        if (g > 0 || h > 0) {
+          grandTotals[ETFI_YIELDS.GOLD] += g;
+          grandTotals[ETFI_YIELDS.HAPPINESS] += h;
+          withMaint.push(rec);
+        } else {
+          withoutMaint.push({ ...rec, g: 0, h: 0 });
+        }
+      }
+    
+      if (!withMaint.length && !withoutMaint.length) return null;
+    
+      // Sort within each section to keep quarters adjacent and most valuable first
+      withMaint.sort((a, b) => {
+        if (a.quarterKey !== b.quarterKey) return a.quarterKey.localeCompare(b.quarterKey);
+        const ta = a.g + a.h, tb = b.g + b.h;
+        return tb - ta;
+      });
+      withoutMaint.sort((a, b) => {
+        if (a.quarterKey !== b.quarterKey) return a.quarterKey.localeCompare(b.quarterKey);
+        // alphabetical by name if same quarter
+        return Locale.compose(a.nameKey).localeCompare(Locale.compose(b.nameKey));
+      });
+    
+      // Group by quarter *per section*, but only merge rows if that quarter has 2+ buildings in that section
+      function groupByQuarter(items) {
+        const map = new Map();
+        for (const it of items) {
+          if (!map.has(it.quarterKey)) map.set(it.quarterKey, []);
+          map.get(it.quarterKey).push(it);
+        }
+        return map;
+      }
+    
+      function renderRowsForSection(items) {
+        const byQ = groupByQuarter(items);
+        let html = "";
+    
+        for (const [qKey, arr] of byQ) {
+          if (arr.length >= 2) {
+            // Render grouped row: left = concatenated buildings with bullets, right = summed yields
+            const namesInline = arr
+              .map((b) => `
+                <span class="inline-flex items-center gap-2 whitespace-nowrap">
+                  <fxs-icon data-icon-id="${b.iconId}" class="size-5"></fxs-icon>
+                  <span class="opacity-60">| </span>
+                  <span>${Locale.compose(b.nameKey)}</span>
+                </span>
+              `.trim())
+              .join(`<span class="mx-1">•</span>`);
+    
+            const sumG = arr.reduce((s, x) => s + (x.g || 0), 0);
+            const sumH = arr.reduce((s, x) => s + (x.h || 0), 0);
+    
+            const right = `
+              <span class="inline-flex items-center gap-1">
+                <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-4"></fxs-icon>
+                <span class="font-semibold">+${fmt1(sumG)}</span>
+              </span>
+              <span class="inline-flex items-center gap-1 ml-2">
+                <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
+                <span class="font-semibold">+${fmt1(sumH)}</span>
+              </span>
+            `;
+    
+            html += `
+              <div class="flex justify-between items-center mt-1">
+                <div class="flex items-center gap-2 min-w-0">${namesInline}</div>
+                <div class="flex items-center gap-2 flex-wrap justify-end">${right}</div>
+              </div>
+            `;
+          } else {
+            // Single row as before
+            const b = arr[0];
+            const left = `
+              <span class="inline-flex items-center gap-2 whitespace-nowrap">
+                <fxs-icon data-icon-id="${b.iconId}" class="size-5"></fxs-icon>
+                <span class="opacity-60">| </span>
+                <span>${Locale.compose(b.nameKey)}</span>
+              </span>
+            `;
+            const right = `
+              <span class="inline-flex items-center gap-1">
+                <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-4"></fxs-icon>
+                <span class="font-semibold">+${fmt1(b.g)}</span>
+              </span>
+              <span class="inline-flex items-center gap-1 ml-2">
+                <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
+                <span class="font-semibold">+${fmt1(b.h)}</span>
+              </span>
+            `;
+            html += `
+              <div class="flex justify-between items-center mt-1">
+                <div class="flex items-center gap-2 min-w-0">${left}</div>
+                <div class="flex items-center gap-2 flex-wrap justify-end">${right}</div>
+              </div>
+            `;
+          }
+        }
+    
+        return html;
+      }
+    
+      // Header chips (standard spacing)
+      let headerYieldsHtml = "";
+      for (const yType of ORDERED_YIELDS) {
+        const val = grandTotals[yType] || 0;
+        headerYieldsHtml += `
+          <div class="flex items-center gap-2 mr-2">
+            <fxs-icon data-icon-id="${yType}" class="size-5"></fxs-icon>
+            <span class="font-semibold">+${fmt1(val)}</span>
+          </div>
+        `;
+      }
+    
+      const labelWithMaint = Locale.compose("LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE") || "Buildings with Maintenance";
+      const labelWithoutMaint = Locale.compose("LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE") || "Buildings without Maintenance";
+    
+      function renderSection(items, label) {
+        const count = items.length;
+        return `
+          <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
+            <div class="flex justify-between mb-1">
+              <span>${label}</span>
+              <span>${count}</span>
+            </div>
+            <div class="mt-1 border-t border-white/10"></div>
+            ${renderRowsForSection(items)}
+          </div>
+        `;
+      }
+    
+      return `
+        <div class="flex flex-col w-full">
+          <div
+            class="flex items-center justify-center gap-4 mb-2 rounded-md px-3 py-2 flex-wrap"
+            style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
+          >
+            ${headerYieldsHtml}
+          </div>
+    
+          ${renderSection(withMaint, labelWithMaint)}
+    
+          <div class="mt-3"></div>
+    
+          ${renderSection(withoutMaint, labelWithoutMaint)}
+        </div>
+      `;
     }
     getRequirementsText() {
       const projectType = this.getProjectType() ?? -1;

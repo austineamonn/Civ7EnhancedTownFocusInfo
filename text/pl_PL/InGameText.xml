@@ -26,4 +26,6 @@
 <Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS" Language="pl_PL"><Text>Suma osiedli</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER" Language="pl_PL"><Text>Cud natury</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="pl_PL"><Text>Zasoby</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="pl_PL"><Text>Budynki z kosztami utrzymania</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="pl_PL"><Text>Pozostałe budynki</Text></Replace>
 </LocalizedText></Database>

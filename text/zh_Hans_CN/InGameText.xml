@@ -26,4 +26,6 @@
 <Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS" Language="zh_Hans"><Text>定居点总数</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER" Language="zh_Hans"><Text>自然奇观</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="zh_Hans"><Text>资源</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="zh_Hans_CN"><Text>有维护费用的建筑</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="zh_Hans_CN"><Text>其他建筑</Text></Replace>
 </LocalizedText></Database>

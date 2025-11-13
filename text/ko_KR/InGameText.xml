@@ -26,4 +26,6 @@
 <Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS" Language="ko_KR"><Text>정착지 총수</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER" Language="ko_KR"><Text>자연경관</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ko_KR"><Text>자원</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="ko_KR"><Text>유지비가 있는 건물</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="ko_KR"><Text>기타 건물</Text></Replace>
 </LocalizedText></Database>

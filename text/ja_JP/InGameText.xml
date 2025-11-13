@@ -27,4 +27,6 @@
 <Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS" Language="ja_JP"><Text>居住地の合計</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER" Language="ja_JP"><Text>自然遺産</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ja_JP"><Text>資源</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="ja_JP"><Text>維持費のある建物</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="ja_JP"><Text>その他の建物</Text></Replace>
 </LocalizedText></Database>
