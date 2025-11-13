@@ -22,7 +22,8 @@ const ETFI_PROJECT_TYPES = {
   TOWN_HUB: "LOC_PROJECT_TOWN_INN_NAME",
   TOWN_TRADE: "LOC_PROJECT_TOWN_TRADE_NAME",
   TOWN_RESORT: "LOC_PROJECT_TOWN_RESORT_NAME",
-  TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME"
+  TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME",
+  TOWN_URBAN: "LOC_PROJECT_TOWN_URBAN_CENTER_NAME"
 };
 
 const ETFI_YIELDS = {
@@ -294,6 +295,9 @@ class EtfiToolTipType {
 
         case ETFI_PROJECT_TYPES.TOWN_TEMPLE:
           return this.getTempleDetailsHTML(city);
+        
+        case ETFI_PROJECT_TYPES.TOWN_URBAN:
+          return this.getUrbanCenterDetailsHTML(city);
 
         default:
           return null;
@@ -1032,6 +1036,9 @@ class EtfiToolTipType {
       `;
 
       return html;
+    }
+    getUrbanCenterDetailsHTML(city) {
+      
     }
     getRequirementsText() {
       const projectType = this.getProjectType() ?? -1;
