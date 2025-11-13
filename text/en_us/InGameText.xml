@@ -60,10 +60,14 @@
     <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION">
       <Text>Bonus per connection</Text>
     </Replace>
-
     <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES">
       <Text>Total Resources</Text>
     </Replace>
     <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE">
+      <Text></Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_IMPROVEMENTS">
+      <Text>Total Improvements</Text>
+    </Replace>
   </EnglishText>
 </Database>

@@ -348,13 +348,7 @@ class EtfiToolTipType {
       if (!summary) return void 0;
 
       const { items, total, multiplier, baseCount } = summary;
-
-      // Localized (with safe fallback) label for "Total Improvements"
-      const rawLabelTI = typeof Locale?.compose === "function"
-        ? Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS")
-        : null;
-      const labelTotalImprovements =
-        rawLabelTI && !/^LOC_/.test(rawLabelTI) ? rawLabelTI : "Total Improvements";
+      const labelTotalImprovements = Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS");
 
       let html = `
         <div class="flex flex-col w-full">
