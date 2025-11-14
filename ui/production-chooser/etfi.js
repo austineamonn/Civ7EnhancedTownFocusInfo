@@ -17,11 +17,6 @@ import TempleDetails from '../types/temple-town.js';
 import UrbanCenterDetails from '../types/urban-town.js';
 
 // #region Localization constants
-const ETFI_ICONS = {
-  CITY: "CITY_URBAN",
-  TOWN: "CITY_RURAL"
-};
-
 const ETFI_PROJECT_TYPES = {
   TOWN_FARMING:"LOC_PROJECT_TOWN_GRANARY_NAME",
   TOWN_FISHING: "LOC_PROJECT_TOWN_FISHING_NAME",
@@ -42,69 +37,6 @@ const ETFI_YIELDS = {
   SCIENCE: "YIELD_SCIENCE",
   CULTURE: "YIELD_CULTURE"
 };
-
-const ETFI_IMPROVEMENTS = {
-  displayNames: {
-    IMPROVEMENT_WOODCUTTER: "LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER",
-    IMPROVEMENT_WOODCUTTER_RESOURCE: "LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER",
-    IMPROVEMENT_MINE: "LOC_MOD_ETFI_IMPROVEMENT_MINE",
-    IMPROVEMENT_MINE_RESOURCE: "LOC_MOD_ETFI_IMPROVEMENT_MINE",
-    IMPROVEMENT_FISHING_BOAT: "LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT",
-    IMPROVEMENT_FISHING_BOAT_RESOURCE: "LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT",
-    IMPROVEMENT_FARM: "LOC_MOD_ETFI_IMPROVEMENT_FARM",
-    IMPROVEMENT_PASTURE: "LOC_MOD_ETFI_IMPROVEMENT_PASTURE",
-    IMPROVEMENT_PLANTATION: "LOC_MOD_ETFI_IMPROVEMENT_PLANTATION",
-    IMPROVEMENT_CAMP: "LOC_MOD_ETFI_IMPROVEMENT_CAMP",
-    IMPROVEMENT_CLAY_PIT: "LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT",
-    IMPROVEMENT_QUARRY: "LOC_MOD_ETFI_IMPROVEMENT_QUARRY",
-  },
-  sets: {
-    food: new Set([
-      "IMPROVEMENT_FARM",
-      "IMPROVEMENT_PASTURE",
-      "IMPROVEMENT_PLANTATION",
-      "IMPROVEMENT_FISHING_BOAT",
-      "IMPROVEMENT_FISHING_BOAT_RESOURCE",
-    ]),
-    production: new Set([
-      "IMPROVEMENT_CAMP",
-      "IMPROVEMENT_WOODCUTTER",
-      "IMPROVEMENT_WOODCUTTER_RESOURCE",
-      "IMPROVEMENT_CLAY_PIT",
-      "IMPROVEMENT_MINE",
-      "IMPROVEMENT_MINE_RESOURCE",
-      "IMPROVEMENT_QUARRY",
-    ]),
-  },
-};
-
-// #region Helpers
-function getEraMultiplier(base = 1) {
-  let multiplier = base;
-  const ageData = GameInfo.Ages.lookup(Game.age);
-  if (!ageData) return multiplier;
-
-  const ageType = (ageData.AgeType || "").trim();
-  if (ageType === "AGE_EXPLORATION") {
-    multiplier += 1;
-  } else if (ageType === "AGE_MODERN") {
-    multiplier += 2;
-  }
-  return multiplier;
-}
-
-function renderHeaderBadge(iconId, value) {
-  return `
-    <div 
-      class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2"
-      style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
-    >
-      <fxs-icon data-icon-id="${iconId}" class="size-5"></fxs-icon>
-      <span class="font-semibold">+${value}</span>
-    </div>
-  `;
-}
-// #endregion
 
 // #region EtfiToolTipType
 const bulletChar = String.fromCodePoint(8226);
@@ -157,7 +89,7 @@ class EtfiToolTipType {
         this.header,
         this.divider,
         this.description,
-        this.detailsContainer, // NEW: ETFI details
+        this.detailsContainer, // NEW: ETFI Container
         this.productionCost,
         this.requirementsContainer,
         this.gemsContainer
