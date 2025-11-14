@@ -267,7 +267,7 @@ class EtfiToolTipType {
       }
       this.gemsContainer.classList.toggle("hidden", !recommendations);
     }
-    // NEW: central dispatcher for ETFI details text
+    // NEW: central dispatcher for ETFI details text, with fallback to empty header if no details available
     getDetailsText(city) {
       if (!this.target) return null;
 
@@ -276,32 +276,90 @@ class EtfiToolTipType {
 
       switch (projectNameKey) {
         case ETFI_PROJECT_TYPES.TOWN_FARMING:
-          return this.getFoodFocusDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_FISHING: {
+          const html = this.getFoodFocusDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
 
-        case ETFI_PROJECT_TYPES.TOWN_FISHING:
-          return this.getFoodFocusDetailsHTML(city);
-
-        case ETFI_PROJECT_TYPES.TOWN_MINING:
-          return this.getMiningDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_MINING: {
+          const html = this.getMiningDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
         
-        case ETFI_PROJECT_TYPES.TOWN_HUB:
-          return this.getInnDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_HUB: {
+          const html = this.getInnDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
         
-        case ETFI_PROJECT_TYPES.TOWN_TRADE:
-          return this.getTradeDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_TRADE: {
+          const html = this.getTradeDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
 
-        case ETFI_PROJECT_TYPES.TOWN_RESORT:
-          return this.getResortDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_RESORT: {
+          const html = this.getResortDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
 
-        case ETFI_PROJECT_TYPES.TOWN_TEMPLE:
-          return this.getTempleDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_TEMPLE: {
+          const html = this.getTempleDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
         
-        case ETFI_PROJECT_TYPES.TOWN_URBAN:
-          return this.getUrbanCenterDetailsHTML(city);
+        case ETFI_PROJECT_TYPES.TOWN_URBAN: {
+          const html = this.getUrbanCenterDetailsHTML(city);
+          return html || this.renderEmptyDetailsHTML(projectNameKey);
+        }
 
         default:
           return null;
       }
+    }
+
+    // NEW: render fallback empty header with +0 yields based on project type
+    renderEmptyDetailsHTML(projectNameKey) {
+      const map = {};
+      map[ETFI_PROJECT_TYPES.TOWN_FARMING]  = [ETFI_YIELDS.FOOD];
+      map[ETFI_PROJECT_TYPES.TOWN_FISHING]  = [ETFI_YIELDS.FOOD];
+      map[ETFI_PROJECT_TYPES.TOWN_MINING]   = [ETFI_YIELDS.PRODUCTION];
+      map[ETFI_PROJECT_TYPES.TOWN_HUB]      = [ETFI_YIELDS.INFLUENCE];
+      map[ETFI_PROJECT_TYPES.TOWN_TRADE]    = [ETFI_YIELDS.HAPPINESS];
+      map[ETFI_PROJECT_TYPES.TOWN_RESORT]   = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
+      map[ETFI_PROJECT_TYPES.TOWN_TEMPLE]   = [ETFI_YIELDS.HAPPINESS];
+      map[ETFI_PROJECT_TYPES.TOWN_URBAN]    = [ETFI_YIELDS.GOLD, ETFI_YIELDS.HAPPINESS];
+
+      const yields = map[projectNameKey] || [];
+
+      // Build standardized header chips with +0 values
+      let headerYieldsHtml = "";
+      if (yields.length) {
+        for (const yType of yields) {
+          headerYieldsHtml += `
+            <div class="flex items-center gap-2 mr-2">
+              <fxs-icon data-icon-id="${yType}" class="size-5"></fxs-icon>
+              <span class="font-semibold">+0</span>
+            </div>
+          `;
+        }
+      } else {
+        // Sensible fallback if we can't infer the relevant yields
+        headerYieldsHtml = `
+          <div class="flex items-center gap-2 mr-2">
+            <span class="font-semibold">+0</span>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="flex flex-col w-full">
+          <div
+            class="flex items-center justify-center gap-4 mb-2 rounded-md px-3 py-2 flex-wrap"
+            style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
+          >
+            ${headerYieldsHtml}
+          </div>
+        </div>
+      `;
     }
     // NEW:
     getImprovementSummaryForSet(city, targetSet, baseMultiplier = 1) {
