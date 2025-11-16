@@ -3,7 +3,7 @@
 // Standalone helpers & constants for Food/Fishing details.
 // (Kept local to avoid broad refactors while we migrate one detail at a time.)
 
-import { renderEtfiPolicyBonusYieldsHTML } from "../../modifiers/etfi-policy-bonus-yields.js";
+//import { renderEtfiPolicyBonusYieldsHTML } from "../../modifiers/etfi-policy-bonus-yields.js";
 
 const ETFI_YIELDS = {
   FOOD: "YIELD_FOOD",
@@ -148,7 +148,7 @@ function renderImprovementDetailsHTML(summary, yieldIconId) {
   html += `</div>`;
 
   // Bonus Yields: shared helper
-  html += renderEtfiPolicyBonusYieldsHTML(yieldIconId);
+  //html += renderEtfiPolicyBonusYieldsHTML(yieldIconId);
 
   // Close wrapper
   html += `</div>`;
