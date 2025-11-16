@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO" Language="zh_Hant_HK">
+      <Text>強化城鎮專精資訊</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO_DESCRIPTION" Language="zh_Hant_HK">
+      <Text>在《文明 7》中強化顯示城鎮專精產出加成，清楚分解各種改良、建築與貿易路線如何貢獻專精加成。靈感來自 Yamada 與 Mallek 的原始構想。</Text>
+    </Replace>
+  </LocalizedText>
+</Database>

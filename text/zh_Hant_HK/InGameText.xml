@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Database>
+  <LocalizedText>
+    <!-- 區域與時代加成 -->
+    <Replace Tag="LOC_MOD_ETFI_SPECIAL_QUARTERS" Language="zh_Hant_HK">
+      <Text>特殊區域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDING_QUARTERS" Language="zh_Hant_HK">
+      <Text>建築區域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_UNIQUE_QUARTERS" Language="zh_Hant_HK">
+      <Text>文明專屬區域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_FULL_TILE_QUARTERS" Language="zh_Hant_HK">
+      <Text>整格區域</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_ERA_BONUS" Language="zh_Hant_HK">
+      <Text>時代加成</Text>
+    </Replace>
+
+    <!-- 改良設施 -->
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_WOODCUTTER" Language="zh_Hant_HK">
+      <Text>伐木場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_MINE" Language="zh_Hant_HK">
+      <Text>礦場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT" Language="zh_Hant_HK">
+      <Text>漁船</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_FARM" Language="zh_Hant_HK">
+      <Text>農場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PASTURE" Language="zh_Hant_HK">
+      <Text>牧場</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_PLANTATION" Language="zh_Hant_HK">
+      <Text>種植園</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CAMP" Language="zh_Hant_HK">
+      <Text>營地</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_CLAY_PIT" Language="zh_Hant_HK">
+      <Text>黏土坑</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_IMPROVEMENT_QUARRY" Language="zh_Hant_HK">
+      <Text>採石場</Text>
+    </Replace>
+
+    <!-- 貿易與連結 -->
+    <Replace Tag="LOC_MOD_ETFI_TRADE_ROUTES" Language="zh_Hant_HK">
+      <Text>貿易路線</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TRADE_CONNECTIONS" Language="zh_Hant_HK">
+      <Text>連結</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_CITIES" Language="zh_Hant_HK">
+      <Text>城市</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_CONNECTED_TOWNS" Language="zh_Hant_HK">
+      <Text>城鎮</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BONUS_PER_CONNECTION" Language="zh_Hant_HK">
+      <Text>每條連結加成</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE" Language="zh_Hant_HK">
+      <Text>每個資源的幸福度</Text>
+    </Replace>
+
+    <!-- 總計 -->
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_RESOURCES" Language="zh_Hant_HK">
+      <Text>資源總數</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_IMPROVEMENTS" Language="zh_Hant_HK">
+      <Text>改良總數</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_CONNECTIONS" Language="zh_Hant_HK">
+      <Text>連結總數</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_BUILDINGS" Language="zh_Hant_HK">
+      <Text>建築總數</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_TOTAL_SETTLEMENTS" Language="zh_Hant_HK">
+      <Text>定居點總數</Text>
+    </Replace>
+
+    <!-- 標籤標題 -->
+    <Replace Tag="LOC_MOD_ETFI_NATURAL_WONDER" Language="zh_Hant_HK">
+      <Text>自然奇觀</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="zh_Hant_HK">
+      <Text>資源</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="zh_Hant_HK">
+      <Text>需要維護的建築</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="zh_Hant_HK">
+      <Text>其他建築</Text>
+    </Replace>
+  </LocalizedText>
+</Database>

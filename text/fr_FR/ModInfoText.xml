@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+  <LocalizedText>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO" Language="fr_FR">
+      <Text>Infos améliorées sur la focalisation des villes</Text>
+    </Replace>
+    <Replace Tag="LOC_MOD_ENHANCEDTOWNFOCUSINFO_DESCRIPTION" Language="fr_FR">
+      <Text>Une interface améliorée pour afficher les bonus de rendement liés à la focalisation des villes dans Civ7, avec un détail précis des aménagements, bâtiments et routes commerciales qui contribuent aux bonus de spécialisation. Basé sur le concept original de Yamada et Mallek.</Text>
+    </Replace>
+  </LocalizedText>
+</Database>
