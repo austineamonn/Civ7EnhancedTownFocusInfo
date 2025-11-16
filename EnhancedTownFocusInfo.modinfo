@@ -21,8 +21,6 @@
 			<Actions>
 					<UIScripts>
 						<Item>ui/production-chooser/etfi.js</Item>
-						<Item>modifiers/fetch-modifiers.js</Item>
-						<Item>modifiers/modifiers.js</Item>
 					</UIScripts>
 				<UpdateText>
 					<Item>text/en_us/InGameText.xml</Item>
