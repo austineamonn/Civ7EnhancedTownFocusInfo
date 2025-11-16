@@ -33,7 +33,7 @@
 					<Item locale="pl_PL">text/pl_PL/InGameText.xml</Item>
 					<Item locale="ru_RU">text/ru_RU/InGameText.xml</Item>
 					<Item locale="zh_Hans_CN">text/zh_Hans_CN/InGameText.xml</Item>
-					<Item locale="zh_Hant_HK">text/zh_Hans_HK/InGameText.xml</Item>
+					<Item locale="zh_Hant_HK">text/zh_Hant_HK/InGameText.xml</Item>
 				</UpdateText>
 			</Actions>
 		</ActionGroup>
