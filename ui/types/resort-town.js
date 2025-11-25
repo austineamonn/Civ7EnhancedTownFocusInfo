@@ -160,6 +160,9 @@ export default class ResortDetails {
     const totalWonderTiles = wonderItems.reduce((s, w) => s + (w.count || 0), 0);
     const baseTotalAllTiles = baseTotalImprovements + totalWonderTiles;
 
+    const labelNaturalWonder =
+      Locale.compose("LOC_MOD_ETFI_NATURAL_WONDER") || "Natural Wonder";
+
     let html = `
       <div class="flex flex-col w-full">
         <div
@@ -203,16 +206,8 @@ export default class ResortDetails {
       `;
     }
 
-    html += `</div>`; // close improvements section
-
-    // Natural Wonders breakdown
+    // Natural Wonders, as rows directly under improvements
     if (wonderItems.length) {
-      const labelNaturalWonder =
-        Locale.compose("LOC_MOD_ETFI_NATURAL_WONDER") || "Natural Wonder";
-      const showWonderLabel = improvementItems.length > 0;
-
-      html += `<div class="mt-2" style="font-size: 0.8em; line-height: 1.4;">`;
-
       for (const w of wonderItems) {
         // Primary H/G, then all others
         const primaryOrder = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
@@ -236,37 +231,32 @@ export default class ResortDetails {
           `;
         }
 
-        html += `<div class="mt-2">`;
-
-        if (showWonderLabel) {
-          html += `
-            <div class="text-white/90" style="font-size: 0.75em;">
-              ${labelNaturalWonder}
-            </div>
-            <div class="mt-1 mb-1 border-t border-white/10"></div>
-          `;
-        }
-
         html += `
-            <div class="flex justify-between items-center">
+          <div class="flex justify-between items-start mt-1">
+            <div class="flex flex-col min-w-0">
               <div class="flex items-center gap-2">
                 <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
                 <span class="opacity-60">| </span>
                 <span>${w.key}</span>
                 <span class="opacity-70 ml-1">x${w.count}</span>
               </div>
-              <div class="flex flex-wrap justify-end">
-                ${yieldsHtml}
+              <div class="mt-0.5 ml-7 text-white/80" style="font-size: 0.75em;">
+                ${labelNaturalWonder}
               </div>
+            </div>
+            <div class="flex flex-wrap justify-end">
+              ${yieldsHtml}
             </div>
           </div>
         `;
       }
-
-      html += `</div>`;
     }
 
-    html += `</div>`;
+    html += `
+        </div>  <!-- end details section -->
+      </div>    <!-- end outer container -->
+    `;
+
     return html;
   }
 }
