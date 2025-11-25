@@ -2,7 +2,7 @@
 /**
  * Enhanced Town Focus Info Mod - Makes Town Focus Tooltips more informative
  * Author: Zatygold
- * Version: 2.0.0
+ * Version: 2.0.2
  */
 import TooltipManager from '/core/ui/tooltips/tooltip-manager.js';
 import { IsElement } from '/core/ui/utilities/utilities-dom.chunk.js';

@@ -1,12 +1,8 @@
-// ui/production-chooser/details/temple-details.js
-
 // Temple Town: +1 Happiness per completed BUILDING in this town.
 // Groups buildings by tile; stacks (2+ on a tile) are listed first.
 // Returns null if the city has no completed buildings.
 
-const ETFI_YIELDS = {
-  HAPPINESS: "YIELD_HAPPINESS",
-};
+import { ETFI_YIELDS, renderHeaderBadge } from "../../etfi-utilities.js";
 
 export default class TempleDetails {
   render(city) {
@@ -45,7 +41,9 @@ export default class TempleDetails {
     if (!totalBuildings) return null;
 
     // Stacks first (descending by count), then singles
-    const stacks = Object.values(byTile).sort((a, b) => b.buildings.length - a.buildings.length);
+    const stacks = Object.values(byTile).sort(
+      (a, b) => b.buildings.length - a.buildings.length
+    );
     if (!stacks.length) return null;
 
     const bullet = "•";
@@ -53,15 +51,7 @@ export default class TempleDetails {
 
     let html = `
       <div class="flex flex-col w-full">
-        <div 
-          class="flex items-center justify-center gap-4 mb-2 rounded-md px-3 py-2 flex-wrap"
-          style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
-        >
-          <div class="flex items-center gap-2 mr-2">
-            <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-5"></fxs-icon>
-            <span class="font-semibold">+${totalBuildings}</span>
-          </div>
-        </div>
+        ${renderHeaderBadge(ETFI_YIELDS.HAPPINESS, totalBuildings)}
 
         <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
           <div class="flex justify-between mb-1">
@@ -94,7 +84,9 @@ export default class TempleDetails {
 
       html += `
         <div class="flex justify-between items-center mt-1">
-          <div class="flex items-center gap-2 min-w-0">${buildingsHtml}</div>
+          <div class="flex items-center gap-2 min-w-0">
+            ${buildingsHtml}
+          </div>
           <div class="flex items-center gap-1 ml-3">
             <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
             <span class="font-semibold">+${bonus}</span>

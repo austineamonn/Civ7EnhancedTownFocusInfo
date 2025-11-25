@@ -1,5 +1,3 @@
-// ui/production-chooser/details/urban-center-details.js
-
 // Urban Center: "+100% towards" => effective 50% discount on maintenance.
 // Shows GOLD and HAPPINESS savings from completed buildings.
 // Two sections: (1) Buildings with maintenance, (2) Buildings without.
@@ -7,10 +5,7 @@
 // section, render them on a single row and sum their yields.
 // Returns null when there are no completed buildings.
 
-const ETFI_YIELDS = {
-  GOLD: "YIELD_GOLD",
-  HAPPINESS: "YIELD_HAPPINESS",
-};
+import { ETFI_YIELDS, fmt1, renderHeaderChips } from "../../etfi-utilities.js";
 
 export default class UrbanCenterDetails {
   render(city) {
@@ -25,17 +20,14 @@ export default class UrbanCenterDetails {
     // +100% towards => 1 - 1/(1+1.0) = 0.5 (50% discount)
     const DISCOUNT = 1 - 1 / (1 + 1.0);
 
-    // one-decimal, trims trailing .0; required by your spec
-    const fmt1 = (x) => {
-      const v = Math.round(x * 10) / 10;
-      return Math.abs(v - Math.round(v)) < 1e-9 ? String(Math.round(v)) : v.toFixed(1);
-    };
-
     const ORDERED_YIELDS = [ETFI_YIELDS.GOLD, ETFI_YIELDS.HAPPINESS];
 
     const withMaint = [];
     const withoutMaint = [];
-    const grandTotals = { [ETFI_YIELDS.GOLD]: 0, [ETFI_YIELDS.HAPPINESS]: 0 };
+    const grandTotals = {
+      [ETFI_YIELDS.GOLD]: 0,
+      [ETFI_YIELDS.HAPPINESS]: 0,
+    };
 
     for (const id of buildingIds) {
       const inst = Constructibles.get(id);
@@ -49,19 +41,31 @@ export default class UrbanCenterDetails {
       const quarterKey = `${loc.x},${loc.y}`;
 
       const maint = constructibles.getMaintenance(inst.type) || {};
-      let g = 0, h = 0;
+      let g = 0;
+      let h = 0;
+
       for (const yi in maint) {
         const raw = Number(maint[yi]) || 0;
         if (raw <= 0) continue;
+
         const yInfo = GameInfo.Yields[yi];
         if (!yInfo) continue;
+
         const yType = yInfo.YieldType;
         const saved = raw * DISCOUNT;
+
         if (yType === ETFI_YIELDS.GOLD) g += saved;
         if (yType === ETFI_YIELDS.HAPPINESS) h += saved;
       }
 
-      const rec = { quarterKey, iconId: info.ConstructibleType, nameKey: info.Name, g, h };
+      const rec = {
+        quarterKey,
+        iconId: info.ConstructibleType,
+        nameKey: info.Name,
+        g,
+        h,
+      };
+
       if (g > 0 || h > 0) {
         grandTotals[ETFI_YIELDS.GOLD] += g;
         grandTotals[ETFI_YIELDS.HAPPINESS] += h;
@@ -76,9 +80,11 @@ export default class UrbanCenterDetails {
     // Keep quarters adjacent; buildings-with-maint first by value, without-maint alpha by name.
     withMaint.sort((a, b) => {
       if (a.quarterKey !== b.quarterKey) return a.quarterKey.localeCompare(b.quarterKey);
-      const ta = a.g + a.h, tb = b.g + b.h;
+      const ta = a.g + a.h;
+      const tb = b.g + b.h;
       return tb - ta;
     });
+
     withoutMaint.sort((a, b) => {
       if (a.quarterKey !== b.quarterKey) return a.quarterKey.localeCompare(b.quarterKey);
       return Locale.compose(a.nameKey).localeCompare(Locale.compose(b.nameKey));
@@ -96,13 +102,15 @@ export default class UrbanCenterDetails {
       for (const [, arr] of byQ) {
         if (arr.length >= 2) {
           const namesInline = arr
-            .map((b) => `
+            .map(
+              (b) => `
               <span class="inline-flex items-center gap-2 whitespace-nowrap">
                 <fxs-icon data-icon-id="${b.iconId}" class="size-5"></fxs-icon>
                 <span class="opacity-60">| </span>
                 <span>${Locale.compose(b.nameKey)}</span>
               </span>
-            `.trim())
+            `.trim()
+            )
             .join(`<span class="mx-1">•</span>`);
 
           const sumG = arr.reduce((s, x) => s + (x.g || 0), 0);
@@ -127,6 +135,7 @@ export default class UrbanCenterDetails {
           `;
         } else {
           const b = arr[0];
+
           const left = `
             <span class="inline-flex items-center gap-2 whitespace-nowrap">
               <fxs-icon data-icon-id="${b.iconId}" class="size-5"></fxs-icon>
@@ -134,6 +143,7 @@ export default class UrbanCenterDetails {
               <span>${Locale.compose(b.nameKey)}</span>
             </span>
           `;
+
           const right = `
             <span class="inline-flex items-center gap-1">
               <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-4"></fxs-icon>
@@ -144,6 +154,7 @@ export default class UrbanCenterDetails {
               <span class="font-semibold">+${fmt1(b.h)}</span>
             </span>
           `;
+
           html += `
             <div class="flex justify-between items-center mt-1">
               <div class="flex items-center gap-2 min-w-0">${left}</div>
@@ -155,20 +166,12 @@ export default class UrbanCenterDetails {
       return html;
     };
 
-    // Header chips with standard spacing
-    let headerYieldsHtml = "";
-    for (const yType of ORDERED_YIELDS) {
-      const val = grandTotals[yType] || 0;
-      headerYieldsHtml += `
-        <div class="flex items-center gap-2 mr-2">
-          <fxs-icon data-icon-id="${yType}" class="size-5"></fxs-icon>
-          <span class="font-semibold">+${fmt1(val)}</span>
-        </div>
-      `;
-    }
-
-    const labelWithMaint = Locale.compose("LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE") || "Buildings with Maintenance";
-    const labelWithoutMaint = Locale.compose("LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE") || "Buildings without Maintenance";
+    const labelWithMaint =
+      Locale.compose("LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE") ||
+      "Buildings with Maintenance";
+    const labelWithoutMaint =
+      Locale.compose("LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE") ||
+      "Buildings without Maintenance";
 
     const renderSection = (items, label) => {
       const count = items.length;
@@ -183,6 +186,8 @@ export default class UrbanCenterDetails {
         </div>
       `;
     };
+
+    const headerYieldsHtml = renderHeaderChips(ORDERED_YIELDS, grandTotals);
 
     return `
       <div class="flex flex-col w-full">

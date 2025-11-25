@@ -1,21 +1,9 @@
-// ui/production-chooser/details/trade-details.js
+// Trade (resources → Happiness) details renderer.
+// - +2 Happiness per resource tile (city center + purchased).
+// - Shows total Happiness, total resource tiles, and per-resource breakdown.
+// Returns null if no resource tiles are found (caller can render +0 fallback).
 
-// Self-contained Trade (resources → Happiness) details renderer.
-const ETFI_YIELDS = {
-  HAPPINESS: "YIELD_HAPPINESS",
-};
-
-function renderHeaderBadge(iconId, value) {
-  return `
-    <div 
-      class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2"
-      style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
-    >
-      <fxs-icon data-icon-id="${iconId}" class="size-5"></fxs-icon>
-      <span class="font-semibold">+${value}</span>
-    </div>
-  `;
-}
+import { ETFI_YIELDS, renderHeaderBadge } from "../../etfi-utilities.js";
 
 export default class TradeDetails {
   /**
@@ -23,7 +11,7 @@ export default class TradeDetails {
    * - Header: +Happiness total
    * - Summary: Total resource tiles
    * - Rows: one per resource type (icon | name x count | +Happiness)
-   * Returns null if no resource tiles are found (caller can render +0 fallback).
+   * Returns null if no resource tiles are found.
    */
   render(city) {
     if (!city || !GameplayMap || !GameInfo?.Resources) return null;
@@ -82,12 +70,11 @@ export default class TradeDetails {
     const totalHappiness = totalResourceTiles * happinessPerTile;
 
     const labelTotalResources = Locale.compose("LOC_MOD_ETFI_TOTAL_RESOURCES");
-    const labelPerResource = Locale.compose("LOC_MOD_ETFI_HAPPINESS_PER_RESOURCE");
 
     let html = `
       <div class="flex flex-col w-full">
         ${renderHeaderBadge(ETFI_YIELDS.HAPPINESS, totalHappiness)}
-        <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
+        <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4%;">
           <div class="flex justify-between mb-1">
             <span>${labelTotalResources}</span>
             <span>${totalResourceTiles}</span>
@@ -112,11 +99,6 @@ export default class TradeDetails {
         </div>
       `;
     }
-
-    html += `
-        </div>
-      </div>
-    `;
 
     return html;
   }
