@@ -1,8 +1,5 @@
 // Farming/Fishing: shared improvement-set logic + generic renderer.
 
-import { ETFI_YIELDS, buildImprovementSetSummary } from "../../etfi-details-logic.js";
-import { renderImprovementSummaryHTML } from "../../etfi-details-render.js";
-
 const ETFI_IMPROVEMENTS = {
   displayNames: {
     IMPROVEMENT_FISHING_BOAT: "LOC_MOD_ETFI_IMPROVEMENT_FISHING_BOAT",
