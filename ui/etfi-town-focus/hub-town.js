@@ -1,26 +1,14 @@
-// ui/production-chooser/details/hub-details.js
+// Hub (Inn) details renderer.
+// - +1 Influence per connected city/town.
+// - Header: total Influence (connections).
+// - Body: separate rows for Cities and Towns.
 
-// Self-contained Hub (Inn) details renderer.
-const ETFI_YIELDS = {
-  INFLUENCE: "YIELD_DIPLOMACY",
-};
+import { ETFI_YIELDS, renderHeader } from "../../etfi-utilities.js";
 
 const ETFI_ICONS = {
   CITY: "CITY_URBAN",
   TOWN: "CITY_RURAL",
 };
-
-function renderHeaderBadge(iconId, value) {
-  return `
-    <div 
-      class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2"
-      style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
-    >
-      <fxs-icon data-icon-id="${iconId}" class="size-5"></fxs-icon>
-      <span class="font-semibold">+${value}</span>
-    </div>
-  `;
-}
 
 export default class HubDetails {
   /**
@@ -28,7 +16,7 @@ export default class HubDetails {
    * Shows total connections, then breakdown: Cities and Towns.
    */
   render(city) {
-    if (!city || typeof city.getConnectedCities !== "function") return null;
+    if (!city || !Cities || typeof city.getConnectedCities !== "function") return null;
 
     const connectedIds = city.getConnectedCities();
     if (!connectedIds || !connectedIds.length) return null;
@@ -48,6 +36,7 @@ export default class HubDetails {
     }
 
     const totalConnections = towns.length + citiesList.length;
+    if (totalConnections === 0) return null;
 
     const labelCities = Locale.compose("LOC_MOD_ETFI_CONNECTED_CITIES");
     const labelTowns = Locale.compose("LOC_MOD_ETFI_CONNECTED_TOWNS");
@@ -55,7 +44,7 @@ export default class HubDetails {
 
     let html = `
       <div class="flex flex-col w-full">
-        ${renderHeaderBadge(ETFI_YIELDS.INFLUENCE, totalConnections)}
+        ${renderHeader(ETFI_YIELDS.INFLUENCE, totalConnections)}
         <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
           <div class="flex justify-between mb-1">
             <span>${labelTotalConnections}</span>
@@ -76,9 +65,13 @@ export default class HubDetails {
               <span class="font-semibold">+${citiesList.length}</span>
             </div>
           </div>
-          ${citiesList.length
-            ? `<div class="ml-6 opacity-80" style="font-size: 0.8em;">${citiesList.join(" • ")}</div>`
-            : ""}
+          ${
+            citiesList.length
+              ? `<div class="ml-6 opacity-80" style="font-size: 0.8em;">${citiesList.join(
+                  " • "
+                )}</div>`
+              : ""
+          }
 
           <!-- Towns row -->
           <div class="flex justify-between items-center mt-1">
@@ -93,9 +86,13 @@ export default class HubDetails {
               <span class="font-semibold">+${towns.length}</span>
             </div>
           </div>
-          ${towns.length
-            ? `<div class="ml-6 opacity-80" style="font-size: 0.8em;">${towns.join(" • ")}</div>`
-            : ""}
+          ${
+            towns.length
+              ? `<div class="ml-6 opacity-80" style="font-size: 0.8em;">${towns.join(
+                  " • "
+                )}</div>`
+              : ""
+          }
         </div>
       </div>
     `;

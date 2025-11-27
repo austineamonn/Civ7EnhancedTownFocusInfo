@@ -97,5 +97,10 @@
     <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="fr_FR">
       <Text>Autres bâtiments</Text>
     </Replace>
+
+    <!-- Settings -->
+    <Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="fr_FR"><Text>Mods de Zatygold</Text></Replace>
+    <Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="fr_FR"><Text>Enhanced Town Focus Info • Colorer les aperçus des rendements</Text></Replace>
+    <Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="fr_FR"><Text>Colore les aperçus des rendements selon leur type, ce qui les rend plus faciles à distinguer.</Text></Replace>
   </LocalizedText>
 </Database>

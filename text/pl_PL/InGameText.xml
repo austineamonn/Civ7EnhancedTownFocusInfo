@@ -28,4 +28,7 @@
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="pl_PL"><Text>Zasoby</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="pl_PL"><Text>Budynki z kosztami utrzymania</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="pl_PL"><Text>Pozostałe budynki</Text></Replace>
+<Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="pl_PL"><Text>Mody Zatygold</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="pl_PL"><Text>Enhanced Town Focus Info • Pokoloruj podglądy plonów</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="pl_PL"><Text>Koloruje podglądy plonów w zależności od ich typu, dzięki czemu łatwiej je odróżnić.</Text></Replace>
 </LocalizedText></Database>

@@ -28,4 +28,7 @@
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ko_KR"><Text>자원</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="ko_KR"><Text>유지비가 있는 건물</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="ko_KR"><Text>기타 건물</Text></Replace>
+<Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="ko_KR"><Text>Zatygold의 모드</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="ko_KR"><Text>Enhanced Town Focus Info • 수확량 미리보기를 색상으로 표시</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="ko_KR"><Text>수확량 유형에 따라 미리보기를 색상으로 구분하여 더 쉽게 식별할 수 있게 합니다.</Text></Replace>
 </LocalizedText></Database>

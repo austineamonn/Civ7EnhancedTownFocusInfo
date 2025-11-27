@@ -29,4 +29,7 @@
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ja_JP"><Text>資源</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="ja_JP"><Text>維持費のある建物</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="ja_JP"><Text>その他の建物</Text></Replace>
+<Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="ja_JP"><Text>ZatygoldのMOD</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="ja_JP"><Text>Enhanced Town Focus Info • 産出プレビューを色分けする</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="ja_JP"><Text>産出の種類ごとにプレビューに色を付けて、一目で見分けやすくします。</Text></Replace>
 </LocalizedText></Database>

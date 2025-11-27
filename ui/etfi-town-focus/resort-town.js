@@ -1,48 +1,9 @@
-// ui/production-chooser/details/resort-details.js
-
-// Self-contained Resort details renderer.
+// Resort details renderer.
 // Per-age H & G on tiles with ≥1 base Happiness; +50% on Natural Wonders.
 // Header shows summed deltas; body lists improvement buckets and wonder buckets.
 // Returns null if there are no applicable deltas (caller can render +0 fallback).
 
-const ETFI_YIELDS = {
-  HAPPINESS: "YIELD_HAPPINESS",
-  GOLD: "YIELD_GOLD",
-  FOOD: "YIELD_FOOD",
-  PRODUCTION: "YIELD_PRODUCTION",
-  SCIENCE: "YIELD_SCIENCE",
-  CULTURE: "YIELD_CULTURE",
-};
-
-function getEraMultiplier(base = 1) {
-  let m = base;
-  const ageData = GameInfo.Ages.lookup(Game.age);
-  if (!ageData) return m;
-  const t = (ageData.AgeType || "").trim();
-  if (t === "AGE_EXPLORATION") m += 1;
-  else if (t === "AGE_MODERN") m += 2;
-  return m;
-}
-
-function fmt1(x) {
-  const v = Math.round(x * 10) / 10;
-  return Math.abs(v - Math.round(v)) < 1e-9 ? String(Math.round(v)) : v.toFixed(1);
-}
-
-function renderHeaderChipsFromMap(yieldMap, order) {
-  let html = "";
-  for (const yType of order) {
-    const val = yieldMap[yType];
-    if (!val) continue;
-    html += `
-      <div class="flex items-center gap-2 mr-2">
-        <fxs-icon data-icon-id="${yType}" class="size-5"></fxs-icon>
-        <span class="font-semibold">+${fmt1(val)}</span>
-      </div>
-    `;
-  }
-  return html;
-}
+import { ETFI_YIELDS, getEraMultiplier, fmt1, renderHeader } from "../../etfi-utilities.js";
 
 export default class ResortDetails {
   render(city) {
@@ -92,13 +53,17 @@ export default class ResortDetails {
 
       // 2) Per-age H & G on tiles with ≥1 base Happiness
       if (happyBase > 0) {
-        tileYields[ETFI_YIELDS.HAPPINESS] = (tileYields[ETFI_YIELDS.HAPPINESS] || 0) + multiplier;
-        tileYields[ETFI_YIELDS.GOLD]      = (tileYields[ETFI_YIELDS.GOLD] || 0) + multiplier;
+        tileYields[ETFI_YIELDS.HAPPINESS] =
+          (tileYields[ETFI_YIELDS.HAPPINESS] || 0) + multiplier;
+        tileYields[ETFI_YIELDS.GOLD] =
+          (tileYields[ETFI_YIELDS.GOLD] || 0) + multiplier;
       }
 
       // 3) +50% yields on Natural Wonders (after per-age bonuses)
       if (isNW) {
-        for (const yType in tileYields) tileYields[yType] *= 1.5;
+        for (const yType in tileYields) {
+          tileYields[yType] *= 1.5;
+        }
       }
 
       // 4) Delta = final - base (Resort contribution)
@@ -107,7 +72,7 @@ export default class ResortDetails {
       for (const yInfo of GameInfo.Yields) {
         const yType = yInfo.YieldType;
         const base = baseYields[yType] || 0;
-        const fin  = tileYields[yType] || 0;
+        const fin = tileYields[yType] || 0;
         const d = fin - base;
         if (Math.abs(d) > 1e-6) {
           deltaYields[yType] = d;
@@ -129,7 +94,12 @@ export default class ResortDetails {
 
         let wb = wonderBuckets[wonderName];
         if (!wb) {
-          wb = { key: wonderName, iconId, count: 0, yields: Object.create(null) };
+          wb = {
+            key: wonderName,
+            iconId,
+            count: 0,
+            yields: Object.create(null),
+          };
           wonderBuckets[wonderName] = wb;
         }
         wb.count += 1;
@@ -141,7 +111,14 @@ export default class ResortDetails {
         const displayName = Locale.compose(cinfo?.Name) || ctype || "LOC_UNKNOWN";
         let ib = improvementBuckets[displayName];
         if (!ib) {
-          ib = { key: displayName, iconId: ctype, displayName, count: 0, deltaH: 0, deltaG: 0 };
+          ib = {
+            key: displayName,
+            iconId: ctype,
+            displayName,
+            count: 0,
+            deltaH: 0,
+            deltaG: 0,
+          };
           improvementBuckets[displayName] = ib;
         }
         ib.count += 1;
@@ -165,13 +142,19 @@ export default class ResortDetails {
       ETFI_YIELDS.CULTURE,
     ];
 
-    const headerYieldsHtml = renderHeaderChipsFromMap(globalDeltas, headerOrder);
+    const headerYieldsHtml = renderHeader(headerOrder, globalDeltas);
 
     // Label + base counts
     const labelTotalImprovements = Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS");
-    const baseTotalImprovements = improvementItems.reduce((s, it) => s + (it.count || 0), 0);
+    const baseTotalImprovements = improvementItems.reduce(
+      (s, it) => s + (it.count || 0),
+      0
+    );
     const totalWonderTiles = wonderItems.reduce((s, w) => s + (w.count || 0), 0);
     const baseTotalAllTiles = baseTotalImprovements + totalWonderTiles;
+
+    const labelNaturalWonder =
+      Locale.compose("LOC_MOD_ETFI_NATURAL_WONDER") || "Natural Wonder";
 
     let html = `
       <div class="flex flex-col w-full">
@@ -216,15 +199,8 @@ export default class ResortDetails {
       `;
     }
 
-    html += `</div>`; // close improvements section
-
-    // Natural Wonders breakdown
+    // Natural Wonders, as rows directly under improvements
     if (wonderItems.length) {
-      const labelNaturalWonder = Locale.compose("LOC_MOD_ETFI_NATURAL_WONDER") || "Natural Wonder";
-      const showWonderLabel = improvementItems.length > 0;
-
-      html += `<div class="mt-2" style="font-size: 0.8em; line-height: 1.4;">`;
-
       for (const w of wonderItems) {
         // Primary H/G, then all others
         const primaryOrder = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
@@ -248,37 +224,32 @@ export default class ResortDetails {
           `;
         }
 
-        html += `<div class="mt-2">`;
-
-        if (showWonderLabel) {
-          html += `
-            <div class="text-white/90" style="font-size: 0.75em;">
-              ${labelNaturalWonder}
-            </div>
-            <div class="mt-1 mb-1 border-t border-white/10"></div>
-          `;
-        }
-
         html += `
-            <div class="flex justify-between items-center">
+          <div class="flex justify-between items-start mt-1">
+            <div class="flex flex-col min-w-0">
               <div class="flex items-center gap-2">
                 <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
                 <span class="opacity-60">| </span>
                 <span>${w.key}</span>
                 <span class="opacity-70 ml-1">x${w.count}</span>
               </div>
-              <div class="flex flex-wrap justify-end">
-                ${yieldsHtml}
+              <div class="mt-0.5 ml-7 text-white/80" style="font-size: 0.75em;">
+                ${labelNaturalWonder}
               </div>
+            </div>
+            <div class="flex flex-wrap justify-end">
+              ${yieldsHtml}
             </div>
           </div>
         `;
       }
-
-      html += `</div>`;
     }
 
-    html += `</div>`;
+    html += `
+        </div>  <!-- end details section -->
+      </div>    <!-- end outer container -->
+    `;
+
     return html;
   }
 }

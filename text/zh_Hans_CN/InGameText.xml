@@ -30,5 +30,8 @@
         <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="zh_Hans_CN"><Text>资源</Text></Replace>
         <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="zh_Hans_CN"><Text>有维护费用的建筑</Text></Replace>
         <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="zh_Hans_CN"><Text>其他建筑</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="zh_Hans_CN"><Text>Zatygold 的模组</Text></Replace>
+        <Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="zh_Hans_CN"><Text>Enhanced Town Focus Info • 为产出预览着色</Text></Replace>
+        <Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="zh_Hans_CN"><Text>根据产出类型为预览着色，使其更容易区分。</Text></Replace>
     </LocalizedText>
 </Database>

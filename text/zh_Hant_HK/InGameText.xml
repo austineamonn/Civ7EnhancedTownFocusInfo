@@ -97,5 +97,9 @@
     <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="zh_Hant_HK">
       <Text>其他建築</Text>
     </Replace>
+
+    <Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="zh_Hant_HK"><Text>Zatygold 的模組</Text></Replace>
+    <Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="zh_Hant_HK"><Text>Enhanced Town Focus Info • 將產出預覽上色</Text></Replace>
+    <Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="zh_Hant_HK"><Text>依照產出類型為預覽上色，讓玩家更容易分辨。</Text></Replace>
   </LocalizedText>
 </Database>

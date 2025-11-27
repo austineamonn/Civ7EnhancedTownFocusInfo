@@ -37,5 +37,10 @@
     <Row Tag="LOC_MOD_ETFI_NATURAL_WONDER"><Text>Natural Wonder</Text></Row>
     <Row Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE"><Text>Maintenance Buildings</Text></Row>
     <Row Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE"><Text>Other Buildings</Text></Row>
+
+    <!-- Settings -->
+      <Row Tag="LOC_OPTIONS_GROUP_ETFI"><Text>Zatygold's Mods</Text></Row>
+      <Row Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL"><Text>Enhanced Town Focus Info • Color the yield previews</Text></Row>
+      <Row Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC"><Text>Colors the yield previews based on their type, making them easier to distinguish.</Text></Row>
   </EnglishText>
 </Database>

@@ -28,4 +28,7 @@
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="it_IT"><Text>Risorse</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="it_IT"><Text>Edifici con manutenzione</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="it_IT"><Text>Altri edifici</Text></Replace>
+<Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="it_IT"><Text>Mod di Zatygold</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="it_IT"><Text>Enhanced Town Focus Info • Colora le anteprime dei rendimenti</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="it_IT"><Text>Colora le anteprime dei rendimenti in base al loro tipo, rendendole più facili da distinguere.</Text></Replace>
 </LocalizedText></Database>

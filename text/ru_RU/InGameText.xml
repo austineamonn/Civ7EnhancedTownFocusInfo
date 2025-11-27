@@ -28,4 +28,7 @@
 <Replace Tag="LOC_MOD_ETFI_RESOURCES" Language="ru_RU"><Text>Ресурсы</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE" Language="ru_RU"><Text>Здания с затратами на содержание</Text></Replace>
 <Replace Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE" Language="ru_RU"><Text>Прочие здания</Text></Replace>
+<Replace Tag="LOC_OPTIONS_GROUP_ETFI" Language="ru_RU"><Text>Моды от Zatygold</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL" Language="ru_RU"><Text>Enhanced Town Focus Info • Раскрасить предпросмотр доходов</Text></Replace>
+<Replace Tag="LOC_MOD_ETFI_YIELDS_OPTION_COLORFUL_DESC" Language="ru_RU"><Text>Раскрашивает предварительный просмотр доходов в зависимости от их типа, чтобы их было легче различать.</Text></Replace>
 </LocalizedText></Database>
