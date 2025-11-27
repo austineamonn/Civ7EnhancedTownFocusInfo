@@ -38,15 +38,15 @@ export const ETFI_Settings = new class {
     };
 
     constructor() {
-        const modSettings = ModSettingsManager.read("ETFI_YieldsSettings");
+        const modSettings = ModSettingsManager.read("ETFI_Settings");
         if (modSettings) {
             this._data = modSettings;
         }
     }
 
     save() {
-        console.warn("[ETFI_YieldsSettings] saving..", JSON.stringify(this._data));
-        ModSettingsManager.save("ETFI_YieldsSettings", this._data);
+        console.warn("[ETFI_Settings] saving..", JSON.stringify(this._data));
+        ModSettingsManager.save("ETFI_Settings", this._data);
     }
 
     get IsColorful() {
