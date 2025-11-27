@@ -74,7 +74,7 @@ export default class TradeDetails {
 
     const ORDERED_YIELDS = [ETFI_YIELDS.TRADE, ETFI_YIELDS.HAPPINESS];
     const totals = {
-      [ETFI_YIELDS.TRADE]: 5,
+      [ETFI_YIELDS.TRADE]: tradeRange,
       [ETFI_YIELDS.HAPPINESS]: totalHappiness,
     };
 
