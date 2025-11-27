@@ -1,3 +1,6 @@
+// Author: Zatygold
+// ui/town-focus/urban-town.js
+
 // Urban Center: "+100% towards" => effective 50% discount on maintenance.
 // Shows GOLD and HAPPINESS savings from completed buildings that have maintenance.
 // Single section: Buildings with maintenance, grouped by quarter.
@@ -69,9 +72,6 @@ export default class UrbanCenterDetails {
         h,
       });
     }
-
-    // If there are no maintenance-paying buildings, this panel is irrelevant
-    if (!withMaint.length) return null;
 
     // Keep quarters adjacent; buildings-with-maint first by value
     withMaint.sort((a, b) => {
@@ -174,18 +174,13 @@ export default class UrbanCenterDetails {
       `;
     };
 
+    // Render header
     const headerYieldsHtml = renderHeader(ORDERED_YIELDS, grandTotals);
 
     return `
       <div class="flex flex-col w-full">
-        <div
-          class="flex items-center justify-center gap-4 mb-2 rounded-md px-3 py-2 flex-wrap"
-          style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
-        >
-          ${headerYieldsHtml}
-        </div>
-
-        ${renderSection(withMaint, labelWithMaint)}
+        ${headerYieldsHtml}
+        ${withMaint.length > 0 ? renderSection(withMaint, labelWithMaint) : ""}
       </div>
     `;
   }

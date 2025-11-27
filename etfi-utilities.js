@@ -244,108 +244,108 @@ export function getImprovementSummaryForSet({
  *   - An object map: { [yieldId]: numericValue }
  */
 export function renderHeader(yieldOrder, totals) {
-  // Ensure we always operate on an array internally, even if a single string is passed in.
-  const order = Array.isArray(yieldOrder) ? yieldOrder : [yieldOrder];
-
-  // Normalize totals into a { [yieldId]: number } object.
-  let values;
-  if (typeof totals === "number") {
-    // If a single number is provided, apply it to every yield in the order.
-    // This is handy for simple single-yield headers (Temple, Trade, Hub, etc.).
-    values = {};
-    for (const y of order) {
-      values[y] = totals;
+    // Normalize yieldOrder into an array of yield IDs the caller *explicitly* wants.
+    const order = Array.isArray(yieldOrder) ? yieldOrder.filter(Boolean) : (yieldOrder ? [yieldOrder] : []); // remove falsy entries just in case
+  
+    // If the caller didn't specify any yields, just render the bare header bar
+    // so the layout stays stable, but don't guess or add any pills.
+    if (!order.length) {
+      return `
+        <div
+          class="flex items-center justify-center mb-2 rounded-md px-3 py-2 flex-wrap"
+          style="${HEADER_BAR_STYLE}"
+        >
+        </div>
+      `;
     }
-  } else if (totals && typeof totals === "object") {
-    // Already a map: use as-is.
-    values = totals;
-  } else {
-    // No totals provided: treat as empty and let fallback logic handle it.
-    values = {};
-  }
-
-  // If somehow there are no yields to display, still render an empty header bar
-  // so the layout doesn't collapse.
-  if (!order.length) {
+  
+    // Normalize totals into a { [yieldId]: number } map.
+    // Two supported call patterns:
+    //   1) renderHeader([Y1, Y2], { [Y1]: 3, [Y2]: 1 })
+    //   2) renderHeader([Y1, Y2], 0)          // apply same number to all yields in order
+    let values;
+    if (typeof totals === "number") {
+      values = {};
+      for (const y of order) {
+        values[y] = totals;
+      }
+    } else if (totals && typeof totals === "object") {
+      values = totals;
+    } else {
+      values = {};
+    }
+  
+    let anyRendered = false;
+    let headerItemsHtml = "";
+  
+    for (const yType of order) {
+      const raw = values[yType];
+  
+      // Only skip if it's not a number at all.
+      // 0, positive, and negative numbers are all valid and should show a pill.
+      if (typeof raw !== "number") continue;
+  
+      anyRendered = true;
+      const color = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
+  
+      headerItemsHtml += `
+        <div class="flex items-center mr-1">
+          <div
+            class="flex items-center justify-center gap-1"
+            style="
+              /* top | right | bottom | left */
+              padding: 0.5px 4px 0.5px 8px;
+              min-height: 0.5rem;
+              border-radius: 9999px;
+              background-color: ${color};
+              border: 1px solid ${color};
+              color: #f2f2f2;
+              font-size: 0.9em;
+            "
+          >
+            <span class="font-semibold">+${fmt1(raw)}</span>
+            <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
+          </div>
+        </div>
+      `;
+    }
+  
+    // // If the caller gave an order but none of the values were numeric,
+    // // still render *one* pill (+0) for the first yield in the order so
+    // // the header never looks completely empty.
+    // if (!anyRendered) {
+    //   const yType = order[0];
+    //   const color = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
+  
+    //   headerItemsHtml = `
+    //     <div class="flex items-center mr-1">
+    //       <div
+    //         class="flex items-center justify-center gap-1"
+    //         style="
+    //           padding: 0.5px 4px 0.5px 8px;
+    //           min-height: 0.5rem;
+    //           border-radius: 9999px;
+    //           background-color: ${color};
+    //           border: 1px solid ${color};
+    //           color: #f2f2f2;
+    //           font-size: 0.9em;
+    //         "
+    //       >
+    //         <span class="font-semibold">+0</span>
+    //         <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
+    //       </div>
+    //     </div>
+    //   `;
+    // }
+  
     return `
-      <div class="flex items-center justify-center mb-2 rounded-md px-3 py-2 flex-wrap"
-           style="${HEADER_BAR_STYLE}">
+      <div 
+        class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2 flex-wrap"
+        style="${HEADER_BAR_STYLE}"
+      >
+        ${headerItemsHtml}
       </div>
     `;
-  }
-
-  let anyRendered = false;     // Tracks whether at least one pill was actually printed.
-  let headerItemsHtml = "";    // Accumulates HTML for each yield pill.
-
-  for (const yType of order) {
-    const raw = values[yType];
-
-    // Only skip if the value is not a number at all.
-    // 0, positive, and negative values are all valid and should be shown.
-    if (typeof raw !== "number") continue;
-
-    anyRendered = true;
-    const color = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
-
-    headerItemsHtml += `
-      <div class="flex items-center mr-1">
-        <div
-          class="flex items-center justify-center gap-1"
-          style="
-            /* top | right | bottom | left */
-            padding: 0.5px 4px 0.5px 8px;
-            min-height: 0.5rem;
-            border-radius: 9999px;
-            background-color: ${color};
-            border: 1px solid ${color};
-            color: #f2f2f2;
-            font-size: 0.9em;
-          "
-        >
-          <span class="font-semibold">+${fmt1(raw)}</span>
-          <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
-        </div>
-      </div>
-    `;
-  }
-
-  // Fallback: if everything was undefined/null, still render a single "+0" pill
-  // for the first yield in the order so the header never looks completely empty.
-  if (!anyRendered) {
-    const yType = order[0];
-    const color = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
-
-    headerItemsHtml = `
-      <div class="flex items-center mr-1">
-        <div
-          class="flex items-center justify-center gap-1"
-          style="
-            padding: 0.5px 4px 0.5px 8px;
-            min-height: 0.5rem;
-            border-radius: 9999px;
-            background-color: ${color};
-            border: 1px solid ${color};
-            color: #f2f2f2;
-            font-size: 0.9em;
-          "
-        >
-          <span class="font-semibold">+0</span>
-          <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
-        </div>
-      </div>
-    `;
-  }
-
-  // Wrap all pills inside the shared header bar container so all Town panels
-  // have a consistent look and layout.
-  return `
-    <div 
-      class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2 flex-wrap"
-      style="${HEADER_BAR_STYLE}"
-    >
-      ${headerItemsHtml}
-    </div>
-  `;
 }
 
 // #endregion Header Rendering
