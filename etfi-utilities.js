@@ -1,6 +1,9 @@
 //Author: Zatygold
 //etfi-utilities.js
 
+import { ETFI_Settings } from "./core/settings.js";
+
+
 // #region Constants
 
 // Canonical yield IDs for this mod.
@@ -246,109 +249,101 @@ export function getImprovementSummaryForSet({
  *   - An object map: { [yieldId]: numericValue }
  */
 export function renderHeader(yieldOrder, totals) {
-    // Normalize yieldOrder into an array of yield IDs the caller *explicitly* wants.
-    const order = Array.isArray(yieldOrder) ? yieldOrder.filter(Boolean) : (yieldOrder ? [yieldOrder] : []); // remove falsy entries just in case
-  
-    // If the caller didn't specify any yields, just render the bare header bar
-    // so the layout stays stable, but don't guess or add any pills.
-    if (!order.length) {
-      return `
-        <div
-          class="flex items-center justify-center mb-2 rounded-md px-3 py-2 flex-wrap"
-          style="${HEADER_BAR_STYLE}"
-        >
-        </div>
-      `;
+  // Normalize yieldOrder into an array of yield IDs the caller *explicitly* wants.
+  const order = Array.isArray(yieldOrder)
+    ? yieldOrder.filter(Boolean)
+    : (yieldOrder ? [yieldOrder] : []); // remove falsy entries just in case
+
+  // If the caller didn't specify any yields, just render the bare header bar
+  // so the layout stays stable, but don't guess or add any pills.
+  if (!order.length) {
+    return `
+      <div
+        class="flex items-center justify-center mb-2 rounded-md px-3 py-2 flex-wrap"
+        style="${HEADER_BAR_STYLE}"
+      >
+      </div>
+    `;
+  }
+
+  // Normalize totals into a { [yieldId]: number } map.
+  // Two supported call patterns:
+  //   1) renderHeader([Y1, Y2], { [Y1]: 3, [Y2]: 1 })
+  //   2) renderHeader([Y1, Y2], 0)   // apply same number to all yields in order
+  let values;
+  if (typeof totals === "number") {
+    values = {};
+    for (const y of order) {
+      values[y] = totals;
     }
-  
-    // Normalize totals into a { [yieldId]: number } map.
-    // Two supported call patterns:
-    //   1) renderHeader([Y1, Y2], { [Y1]: 3, [Y2]: 1 })
-    //   2) renderHeader([Y1, Y2], 0)          // apply same number to all yields in order
-    let values;
-    if (typeof totals === "number") {
-      values = {};
-      for (const y of order) {
-        values[y] = totals;
-      }
-    } else if (totals && typeof totals === "object") {
-      values = totals;
-    } else {
-      values = {};
-    }
-  
-    let anyRendered = false;
-    let headerItemsHtml = "";
-  
-    for (const yType of order) {
-      const raw = values[yType];
-  
-      // Only skip if it's not a number at all.
-      // 0, positive, and negative numbers are all valid and should show a pill.
-      if (typeof raw !== "number") continue;
-  
-      anyRendered = true;
-      const color = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
-  
+  } else if (totals && typeof totals === "object") {
+    values = totals;
+  } else {
+    values = {};
+  }
+
+  let anyRendered = false;
+  let headerItemsHtml = "";
+
+  // Read the toggle once per header
+  const isColorful = !!ETFI_Settings?.IsColorful;
+
+  for (const yType of order) {
+    const raw = values[yType];
+
+    // Only skip if it's not a number at all.
+    // 0, positive, and negative numbers are all valid and should show.
+    if (typeof raw !== "number") continue;
+
+    anyRendered = true;
+
+    if (isColorful) {
+      // --- Colored pill mode: [icon][+value] ---
+      const baseColor = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
+
       headerItemsHtml += `
         <div class="flex items-center mr-1">
           <div
             class="flex items-center justify-center gap-1"
             style="
               /* top | right | bottom | left */
-              padding: 0.5px 4px 0.5px 8px;
+              padding: 1px 10px 1px 5px;
               min-height: 0.5rem;
               border-radius: 9999px;
-              background-color: ${color};
-              border: 1px solid ${color};
+              background-color: ${baseColor};
+              border: 1px solid ${baseColor};
               color: #f2f2f2;
               font-size: 0.9em;
             "
           >
-            <span class="font-semibold">+${fmt1(raw)}</span>
             <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
+            <span class="font-semibold">+${fmt1(raw)}</span>
           </div>
         </div>
       `;
+    } else {
+      // --- Plain mode (no pill, tighter spacing): [icon][+value] ---
+      headerItemsHtml += `
+        <div class="flex items-center mr-2 gap-1">
+          <fxs-icon data-icon-id="${yType}" class="size-6"></fxs-icon>
+          <span class="font-semibold">+${fmt1(raw)}</span>
+        </div>
+      `;
     }
-  
-    // // If the caller gave an order but none of the values were numeric,
-    // // still render *one* pill (+0) for the first yield in the order so
-    // // the header never looks completely empty.
-    // if (!anyRendered) {
-    //   const yType = order[0];
-    //   const color = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
-  
-    //   headerItemsHtml = `
-    //     <div class="flex items-center mr-1">
-    //       <div
-    //         class="flex items-center justify-center gap-1"
-    //         style="
-    //           padding: 0.5px 4px 0.5px 8px;
-    //           min-height: 0.5rem;
-    //           border-radius: 9999px;
-    //           background-color: ${color};
-    //           border: 1px solid ${color};
-    //           color: #f2f2f2;
-    //           font-size: 0.9em;
-    //         "
-    //       >
-    //         <span class="font-semibold">+0</span>
-    //         <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
-    //       </div>
-    //     </div>
-    //   `;
-    // }
-  
-    return `
-      <div 
-        class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2 flex-wrap"
-        style="${HEADER_BAR_STYLE}"
-      >
-        ${headerItemsHtml}
-      </div>
-    `;
+  }
+
+  // If nothing numeric, you currently want an empty bar (no +0 fallback),
+  // so leave headerItemsHtml empty and still render the container.
+  return `
+    <div 
+      class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2 flex-wrap"
+      style="${HEADER_BAR_STYLE}"
+    >
+      ${headerItemsHtml}
+    </div>
+  `;
 }
+
 
 // #endregion Header Rendering
 

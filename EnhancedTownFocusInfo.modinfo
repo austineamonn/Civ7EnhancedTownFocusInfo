@@ -12,14 +12,41 @@
 	<Dependencies>
 		<Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME" />
 	</Dependencies>
+	<References>
+		<Mod id="core" title="LOC_MODULE_CORE_NAME"/>
+	</References>
 	<ActionCriteria>
 		<Criteria id="always"><AlwaysMet/></Criteria>
 	</ActionCriteria>
 	<ActionGroups>
+		<ActionGroup id="etfi-shell" scope="shell" criteria="always">
+			<Properties>
+				<LoadOrder>1100</LoadOrder>
+			</Properties>
+			<Actions>
+				<UpdateText>
+					<Item>text/en_us/InGameText.xml</Item>
+					<Item locale="fr_FR">text/fr_FR/InGameText.xml</Item>
+					<Item locale="it_IT">text/it_IT/InGameText.xml</Item>
+					<Item locale="ja_JP">text/ja_JP/InGameText.xml</Item>
+					<Item locale="ko_KR">text/ko_KR/InGameText.xml</Item>
+					<Item locale="pl_PL">text/pl_PL/InGameText.xml</Item>
+					<Item locale="ru_RU">text/ru_RU/InGameText.xml</Item>
+					<Item locale="zh_Hans_CN">text/zh_Hans_CN/InGameText.xml</Item>
+					<Item locale="zh_Hant_HK">text/zh_Hant_HK/InGameText.xml</Item>
+				</UpdateText>
+				<UIScripts>
+					<Item>core/settings.js</Item>
+					<Item>ui/settings-init.js</Item>
+				</UIScripts>
+			</Actions>
+		</ActionGroup>
 		<ActionGroup id="etfi-game" scope="game" criteria="always">
 			<Properties><LoadOrder>1100</LoadOrder></Properties>
 			<Actions>
 					<UIScripts>
+						<Item>core/settings.js</Item>
+						<Item>ui/settings-init.js</Item>
 						<Item>ui/production-chooser/etfi.js</Item>
 						<Item>ui/town-focus/farm-fish-towns.js</Item>
 						<Item>ui/town-focus/hub-town.js</Item>
@@ -28,6 +55,7 @@
 						<Item>ui/town-focus/temple-town.js</Item>
 						<Item>ui/town-focus/trade-town.js</Item>
 						<Item>ui/town-focus/urban-town.js</Item>
+						<Item>ui/town-focus/fort-town.js</Item>
 						<Item>etfi-utilities.js</Item>
 					</UIScripts>
 				<UpdateText>
