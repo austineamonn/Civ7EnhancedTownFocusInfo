@@ -15,6 +15,8 @@ import ResortDetails from '../town-focus/resort-town.js';
 import TradeDetails from '../town-focus/trade-town.js';
 import TempleDetails from '../town-focus/temple-town.js';
 import UrbanCenterDetails from '../town-focus/urban-town.js';
+import FortTownDetails from '../town-focus/fort-town.js';
+import { ETFI_YIELDS } from '../../etfi-utilities.js';
 
 // #region Localization constants
 const ETFI_PROJECT_TYPES = {
@@ -25,17 +27,8 @@ const ETFI_PROJECT_TYPES = {
   TOWN_TRADE: "LOC_PROJECT_TOWN_TRADE_NAME",
   TOWN_RESORT: "LOC_PROJECT_TOWN_RESORT_NAME",
   TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME",
-  TOWN_URBAN: "LOC_PROJECT_TOWN_URBAN_CENTER_NAME"
-};
-
-const ETFI_YIELDS = {
-  FOOD: "YIELD_FOOD",
-  PRODUCTION: "YIELD_PRODUCTION",
-  INFLUENCE: "YIELD_DIPLOMACY",
-  HAPPINESS: "YIELD_HAPPINESS",
-  GOLD: "YIELD_GOLD",
-  SCIENCE: "YIELD_SCIENCE",
-  CULTURE: "YIELD_CULTURE"
+  TOWN_URBAN: "LOC_PROJECT_TOWN_URBAN_CENTER_NAME",
+  TOWN_FORT: "LOC_PROJECT_TOWN_FORT_NAME"
 };
 
 // #region EtfiToolTipType
@@ -246,6 +239,11 @@ class EtfiToolTipType {
         
         case ETFI_PROJECT_TYPES.TOWN_URBAN: {
           const html = new UrbanCenterDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+        case ETFI_PROJECT_TYPES.TOWN_FORT: {
+          const html = new FortTownDetails().render(city);
           return html || this.onRenderEmptyDetailsHTML(projectNameKey);
         }
 

@@ -13,6 +13,7 @@ A mod for Civilization VII that enhances the display of town focus yield bonuses
 
 - Updated color yield preview
 - Trade Town now has +5 trade range yield
+- Added Fort Town yield preview
 
 ### Languages
 
