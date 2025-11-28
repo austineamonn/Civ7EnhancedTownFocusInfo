@@ -37,6 +37,7 @@
     <Row Tag="LOC_MOD_ETFI_NATURAL_WONDER"><Text>Natural Wonder</Text></Row>
     <Row Tag="LOC_MOD_ETFI_BUILDINGS_WITH_MAINTENANCE"><Text>Maintenance Buildings</Text></Row>
     <Row Tag="LOC_MOD_ETFI_BUILDINGS_WITHOUT_MAINTENANCE"><Text>Other Buildings</Text></Row>
+    <Row Tag="LOC_MOD_ETFI_TOTAL_WALLS"><Text>Total Walls</Text></Row>
 
     <!-- Settings -->
       <Row Tag="LOC_OPTIONS_GROUP_ETFI"><Text>Zatygold's Mods</Text></Row>
