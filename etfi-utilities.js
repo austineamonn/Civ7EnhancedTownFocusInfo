@@ -63,18 +63,9 @@ const HEADER_BAR_STYLE = "background-color: rgba(10, 10, 20, 0.25); color:#f5f5f
  * @returns {string} formatted number string
  */
 export function fmt1(x) {
-  // Fast path for 0 so we don't risk "-0" or "0.0"
   if (x === 0) return "0";
-
-  // Round to one decimal place.
-  // Example: 1.34 → 13.4 → 13 → 1.3
-  const v = Math.round(x * 10) / 10;
-
-  // If the rounded value is effectively an integer, drop the .0
-  // and show it as "2" instead of "2.0".
-  return Math.abs(v - Math.round(v)) < 1e-9
-    ? String(Math.round(v))
-    : v.toFixed(1);
+  const v = Math.round(x * 10) / 10; 
+  return Math.abs(v - Math.round(v)) < 1e-9 ? String(Math.round(v)) : v.toFixed(1);
 }
 
 /**
@@ -93,18 +84,11 @@ export function fmt1(x) {
  */
 export function getEraMultiplier(base = 1) {
   let multiplier = base;
-
-  // Guarded lookup so we don't crash if some part of GameInfo is missing.
   const ageData = GameInfo?.Ages?.lookup?.(Game.age);
   if (!ageData) return multiplier;
-
   const ageType = (ageData.AgeType || "").trim();
-
-  // Exploration Age: +1 to multiplier
   if (ageType === "AGE_EXPLORATION") multiplier += 1;
-  // Modern Age: +2 to multiplier
   else if (ageType === "AGE_MODERN") multiplier += 2;
-
   return multiplier;
 }
 
@@ -143,23 +127,12 @@ export function getEraMultiplier(base = 1) {
  * @param {number} [options.baseMultiplier=1] - per-improvement yield before era scaling
  * @returns {Object|null} summary object or null if nothing matched
  */
-export function getImprovementSummaryForSet({
-  city,
-  targetSet,
-  displayNameMap,
-  baseMultiplier = 1,
-} = {}) {
-  // Basic sanity checks: city and its constructibles must exist.
+export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, baseMultiplier = 1 } = {}) {
   if (!city || !city.Constructibles) return null;
-  // targetSet must be a non-empty Set of logical types.
   if (!(targetSet instanceof Set) || targetSet.size === 0) return null;
-  // Ensure we have the global systems we rely on.
   if (!GameInfo?.Constructibles || !Districts || !Constructibles) return null;
 
-  // Map from displayKey -> { key, ctype, iconId, displayName, count }
   const resultByDisplayKey = Object.create(null);
-
-  // Get all improvement instances in this city.
   const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
 
   for (const instanceId of improvements) {
@@ -176,7 +149,6 @@ export function getImprovementSummaryForSet({
     if (!fcInfo) continue;
 
     const logicalType = fcInfo.ConstructibleType;
-    // Skip anything that isn't in the target set for this Town (e.g., non-food improvements).
     if (!targetSet.has(logicalType)) continue;
 
     // Use the actual instance's ConstructibleType and name for display and icon.
@@ -184,31 +156,24 @@ export function getImprovementSummaryForSet({
     const ctype = info?.ConstructibleType || logicalType;
 
     // Optionally override the display key from displayNameMap; otherwise use the LOC name or type.
-    const displayKey =
-      (displayNameMap && displayNameMap[ctype]) || info?.Name || ctype;
+    const displayKey = (displayNameMap && displayNameMap[ctype]) || info?.Name || ctype;
 
-    // Ensure we have a bucket for this display key.
     if (!resultByDisplayKey[displayKey]) {
       resultByDisplayKey[displayKey] = {
         key: displayKey,
         ctype,
-        iconId: ctype,                 // Icon ID used directly by <fxs-icon>
-        displayName: Locale.compose(displayKey), // Localized display name
+        iconId: ctype,                 
+        displayName: Locale.compose(displayKey),
         count: 0,
       };
     }
-
-    // Increment the count for this display group.
     resultByDisplayKey[displayKey].count += 1;
   }
 
   const items = Object.values(resultByDisplayKey);
   if (!items.length) return null;
 
-  // Total number of qualifying improvements before era scaling.
   const baseTotal = items.reduce((sum, it) => sum + it.count, 0);
-
-  // Compute the era multiplier once and apply it to the base total.
   const multiplier = getEraMultiplier(baseMultiplier);
   const total = baseTotal * multiplier;
 
@@ -250,12 +215,8 @@ export function getImprovementSummaryForSet({
  */
 export function renderHeader(yieldOrder, totals) {
   // Normalize yieldOrder into an array of yield IDs the caller *explicitly* wants.
-  const order = Array.isArray(yieldOrder)
-    ? yieldOrder.filter(Boolean)
-    : (yieldOrder ? [yieldOrder] : []); // remove falsy entries just in case
+  const order = Array.isArray(yieldOrder) ? yieldOrder.filter(Boolean) : (yieldOrder ? [yieldOrder] : []);
 
-  // If the caller didn't specify any yields, just render the bare header bar
-  // so the layout stays stable, but don't guess or add any pills.
   if (!order.length) {
     return `
       <div
@@ -266,10 +227,6 @@ export function renderHeader(yieldOrder, totals) {
     `;
   }
 
-  // Normalize totals into a { [yieldId]: number } map.
-  // Two supported call patterns:
-  //   1) renderHeader([Y1, Y2], { [Y1]: 3, [Y2]: 1 })
-  //   2) renderHeader([Y1, Y2], 0)   // apply same number to all yields in order
   let values;
   if (typeof totals === "number") {
     values = {};
@@ -285,14 +242,10 @@ export function renderHeader(yieldOrder, totals) {
   let anyRendered = false;
   let headerItemsHtml = "";
 
-  // Read the toggle once per header
   const isColorful = !!ETFI_Settings?.IsColorful;
 
   for (const yType of order) {
     const raw = values[yType];
-
-    // Only skip if it's not a number at all.
-    // 0, positive, and negative numbers are all valid and should show.
     if (typeof raw !== "number") continue;
 
     anyRendered = true;
@@ -376,9 +329,7 @@ export function renderImprovementDetailsHTML(summary, yieldIconId) {
   if (!summary) return null;
 
   const { items, total, multiplier, baseCount } = summary;
-  const labelTotalImprovements = Locale.compose(
-    "LOC_MOD_ETFI_TOTAL_IMPROVEMENTS"
-  );
+  const labelTotalImprovements = Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS");
 
   // Single-yield header: we pass a one-element array for the order
   // and a map with that yield's total value.
@@ -391,17 +342,13 @@ export function renderImprovementDetailsHTML(summary, yieldIconId) {
         <div class="flex justify-between mb-1">
           <span>${labelTotalImprovements}</span>
           <span>${
-            typeof baseCount === "number"
-              ? baseCount
-              // Fallback: if baseCount wasn't provided, estimate it from total / multiplier.
-              : Math.round(total / (multiplier || 1))
+            typeof baseCount === "number" ? baseCount : Math.round(total / (multiplier || 1))
           }</span>
         </div>
         <div class="mt-1 border-t border-white/10"></div>
   `;
 
-  // Render each improvement group:
-  //   [icon] | [name] x<count>    [yield icon] +<count * multiplier>
+  // Render each improvement group: [icon] | [name] x<count>    [yield icon] +<count * multiplier>
   for (const item of items) {
     const perImprovementYield = item.count * multiplier;
     html += `
