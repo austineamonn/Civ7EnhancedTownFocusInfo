@@ -215,8 +215,12 @@ export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, b
  */
 export function renderHeader(yieldOrder, totals) {
   // Normalize yieldOrder into an array of yield IDs the caller *explicitly* wants.
-  const order = Array.isArray(yieldOrder) ? yieldOrder.filter(Boolean) : (yieldOrder ? [yieldOrder] : []);
+  const order = Array.isArray(yieldOrder)
+    ? yieldOrder.filter(Boolean)
+    : (yieldOrder ? [yieldOrder] : []); // remove falsy entries just in case
 
+  // If the caller didn't specify any yields, just render the bare header bar
+  // so the layout stays stable, but don't guess or add any pills.
   if (!order.length) {
     return `
       <div
@@ -227,6 +231,10 @@ export function renderHeader(yieldOrder, totals) {
     `;
   }
 
+  // Normalize totals into a { [yieldId]: number } map.
+  // Two supported call patterns:
+  //   1) renderHeader([Y1, Y2], { [Y1]: 3, [Y2]: 1 })
+  //   2) renderHeader([Y1, Y2], 0)          // apply same number to all yields in order
   let values;
   if (typeof totals === "number") {
     values = {};
@@ -239,64 +247,86 @@ export function renderHeader(yieldOrder, totals) {
     values = {};
   }
 
-  let anyRendered = false;
-  let headerItemsHtml = "";
-
   const isColorful = !!ETFI_Settings?.IsColorful;
+
+  // Build individual "chip" snippets for each yield in order.
+  const chips = [];
 
   for (const yType of order) {
     const raw = values[yType];
+
+    // Only skip if it's not a number at all.
+    // 0, positive, and negative numbers are all valid and should show.
     if (typeof raw !== "number") continue;
 
-    anyRendered = true;
+    const baseColor = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
 
-    if (isColorful) {
-      // --- Colored pill mode: [icon][+value] ---
-      const baseColor = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
+    // Colorful mode: tinted pill. Non-colorful: transparent, no border, tighter padding.
+    const bgColor = isColorful ? baseColor : "transparent";
+    const borderCss = isColorful ? `1px solid ${baseColor}` : "none";
+    const paddingCss = isColorful ? "0.5px 4px 0.5px 8px" : "0";
+    const radiusCss = isColorful ? "9999px" : "0";
 
-      headerItemsHtml += `
-        <div class="flex items-center mr-1">
-          <div
-            class="flex items-center justify-center gap-1"
-            style="
-              /* top | right | bottom | left */
-              padding: 1px 10px 1px 5px;
-              min-height: 0.5rem;
-              border-radius: 9999px;
-              background-color: ${baseColor};
-              border: 1px solid ${baseColor};
-              color: #f2f2f2;
-              font-size: 0.9em;
-            "
-          >
-            <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
-            <span class="font-semibold">+${fmt1(raw)}</span>
-          </div>
-        </div>
-      `;
-    } else {
-      // --- Plain mode (no pill, tighter spacing): [icon][+value] ---
-      headerItemsHtml += `
-        <div class="flex items-center mr-2 gap-1">
-          <fxs-icon data-icon-id="${yType}" class="size-6"></fxs-icon>
+    const chipHtml = `
+      <div class="flex items-center mx-1">
+        <div
+          class="flex items-center justify-center gap-1"
+          style="
+            /* top | right | bottom | left */
+            padding: ${paddingCss};
+            min-height: 0.5rem;
+            border-radius: ${radiusCss};
+            background-color: ${bgColor};
+            border: ${borderCss};
+            color: #f2f2f2;
+            font-size: 0.9em;
+          "
+        >
+          <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
           <span class="font-semibold">+${fmt1(raw)}</span>
         </div>
-      `;
-    }
+      </div>
+    `;
+
+    chips.push(chipHtml);
   }
 
-  // If nothing numeric, you currently want an empty bar (no +0 fallback),
-  // so leave headerItemsHtml empty and still render the container.
+  // No numeric values at all: still render an empty bar (you previously
+  // disabled the +0 fallback), so keep that behavior.
+  if (!chips.length) {
+    return `
+      <div 
+        class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2 flex-wrap"
+        style="${HEADER_BAR_STYLE}"
+      >
+      </div>
+    `;
+  }
+
+  // At most 2 yields on the first line; any remaining go on a second line.
+  const firstRowHtml = chips.slice(0, 2).join("");
+  const secondRowHtml = chips.length > 2 ? chips.slice(2).join("") : "";
+
   return `
     <div 
-      class="flex items-center justify-center gap-2 mb-2 rounded-md px-3 py-2 flex-wrap"
+      class="flex flex-col items-center justify-center mb-2 rounded-md px-3 py-2"
       style="${HEADER_BAR_STYLE}"
     >
-      ${headerItemsHtml}
+      <div class="flex items-center justify-center gap-2 flex-wrap">
+        ${firstRowHtml}
+      </div>
+      ${
+        secondRowHtml
+          ? `
+            <div class="flex items-center justify-center gap-2 flex-wrap mt-1">
+              ${secondRowHtml}
+            </div>
+          `
+          : ""
+      }
     </div>
   `;
 }
-
 
 // #endregion Header Rendering
 

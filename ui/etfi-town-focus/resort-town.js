@@ -158,13 +158,7 @@ export default class ResortDetails {
 
     let html = `
       <div class="flex flex-col w-full">
-        <div
-          class="flex items-center justify-center gap-4 mb-2 rounded-md px-3 py-2 flex-wrap"
-          style="background-color: rgba(10, 10, 20, 0.25); color:#f5f5f5; text-align:center;"
-        >
-          ${headerYieldsHtml}
-        </div>
-
+       ${headerYieldsHtml}
         <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
           <div class="flex justify-between mb-1">
             <span>${labelTotalImprovements}</span>
