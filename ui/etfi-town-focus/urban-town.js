@@ -93,26 +93,23 @@ export default class UrbanCenterDetails {
       for (const [, arr] of byQ) {
         if (arr.length >= 2) {
           const namesInline = arr
-            .map(
-              (b) => `
+            .map((b) => `
               <span class="inline-flex items-center gap-2 whitespace-nowrap">
                 <fxs-icon data-icon-id="${b.iconId}" class="size-5"></fxs-icon>
                 <span class="opacity-60">| </span>
                 <span>${Locale.compose(b.nameKey)}</span>
               </span>
-            `.trim()
-            )
-            .join(`<span class="mx-1">•</span>`);
+            `.trim()).join(`<span class="mx-1">•</span>`);
 
           const sumG = arr.reduce((s, x) => s + (x.g || 0), 0);
           const sumH = arr.reduce((s, x) => s + (x.h || 0), 0);
 
           const right = `
-            <span class="inline-flex items-center gap-1">
+            <span class="inline-flex items-center gap-2 ml-2">
               <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-4"></fxs-icon>
               <span class="font-semibold">+${fmt1(sumG)}</span>
             </span>
-            <span class="inline-flex items-center gap-1 ml-2">
+            <span class="inline-flex items-center gap-2 ml-2">
               <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
               <span class="font-semibold">+${fmt1(sumH)}</span>
             </span>

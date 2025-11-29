@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Mod id="EnhancedTownFocusInfoMod" version="02010"
+<Mod id="EnhancedTownFocusInfoMod" version="20101"
 	xmlns="ModInfo">
 	<Properties>
 		<Name>LOC_MOD_ENHANCEDTOWNFOCUSINFO</Name>
-		<Version>2.1.0</Version>
+		<Version>2.1.1</Version>
 		<Description>LOC_MOD_ENHANCEDTOWNFOCUSINFO_DESCRIPTION</Description>
 		<Authors>Zatygold</Authors>
 		<Package>Mod</Package>

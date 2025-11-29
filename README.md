@@ -2,6 +2,24 @@
 
 A mod for Civilization VII that enhances the display of town focus yield bonuses, showing detailed breakdowns of improvements, buildings, and trade routes that contribute to specialization bonuses.
 
+## Version 2.1.1
+
+### What's New
+
+- Updated Fort town and Religious Site to show the number of walls
+- Fort Town now displays the total "Health" gained per Age relevant wall
+- Fixed Religious Site bug where the walls were not be calculated into the total happiness
+- Improved readbility for Resort Town, Urban Town, Religious Site, and Fort Town
+- Added helpers
+
+### Features
+
+- N/A
+
+### Languages
+
+- N/A
+
 ## Version 2.1.0
 
 ### What's New
