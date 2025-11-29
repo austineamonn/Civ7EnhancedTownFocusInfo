@@ -234,7 +234,7 @@ export function renderHeader(yieldOrder, totals) {
   // Normalize totals into a { [yieldId]: number } map.
   // Two supported call patterns:
   //   1) renderHeader([Y1, Y2], { [Y1]: 3, [Y2]: 1 })
-  //   2) renderHeader([Y1, Y2], 0)          // apply same number to all yields in order
+  //   2) renderHeader([Y1, Y2], 0)   // apply same number to all yields in order
   let values;
   if (typeof totals === "number") {
     values = {};
@@ -249,7 +249,7 @@ export function renderHeader(yieldOrder, totals) {
 
   const isColorful = !!ETFI_Settings?.IsColorful;
 
-  // Build individual "chip" snippets for each yield in order.
+  // Build individual pill snippets for each yield in order.
   const chips = [];
 
   for (const yType of order) {
@@ -259,36 +259,10 @@ export function renderHeader(yieldOrder, totals) {
     // 0, positive, and negative numbers are all valid and should show.
     if (typeof raw !== "number") continue;
 
-    const baseColor = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
-
-    // Colorful mode: tinted pill. Non-colorful: transparent, no border, tighter padding.
-    const bgColor = isColorful ? baseColor : "transparent";
-    const borderCss = isColorful ? `1px solid ${baseColor}` : "none";
-    const paddingCss = isColorful ? "0.5px 4px 0.5px 8px" : "0";
-    const radiusCss = isColorful ? "9999px" : "0";
-
-    const chipHtml = `
-      <div class="flex items-center mx-1">
-        <div
-          class="flex items-center justify-center gap-1"
-          style="
-            /* top | right | bottom | left */
-            padding: ${paddingCss};
-            min-height: 0.5rem;
-            border-radius: ${radiusCss};
-            background-color: ${bgColor};
-            border: ${borderCss};
-            color: #f2f2f2;
-            font-size: 0.9em;
-          "
-        >
-          <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
-          <span class="font-semibold">+${fmt1(raw)}</span>
-        </div>
-      </div>
-    `;
-
-    chips.push(chipHtml);
+    const chipHtml = createHeaderChipHtml(yType, raw, isColorful);
+    if (chipHtml) {
+      chips.push(chipHtml);
+    }
   }
 
   // No numeric values at all: still render an empty bar (you previously
@@ -328,6 +302,48 @@ export function renderHeader(yieldOrder, totals) {
   `;
 }
 
+/**
+ * Helper for a single header pill:
+ * [ yield icon ] [+value]
+ *
+ * Respects the IsColorful toggle and uses the same structure/inline styles
+ * as your existing implementation.
+ *
+ * @param {string} yType - yield/icon ID (e.g. ETFI_YIELDS.GOLD)
+ * @param {number} rawValue - numeric value for this yield
+ * @param {boolean} isColorful - whether to use tinted pill style
+ * @returns {string} HTML snippet for one pill
+ */
+function createHeaderChipHtml(yType, rawValue, isColorful) {
+  const baseColor = HEADER_YIELD_COLORS[yType] || DEFAULT_HEADER_BG;
+
+  // Colorful mode: tinted pill. Non-colorful: transparent, no border, tighter padding.
+  const bgColor = isColorful ? baseColor : "transparent";
+  const borderCss = isColorful ? `1px solid ${baseColor}` : "none";
+  const paddingCss = isColorful ? "0.5px 4px 0.5px 8px" : "0";
+  const radiusCss = isColorful ? "9999px" : "0";
+
+  return `
+    <div class="flex items-center mx-1">
+      <div
+        class="flex items-center justify-center gap-1"
+        style="
+          /* top | right | bottom | left */
+          padding: ${paddingCss};
+          min-height: 0.5rem;
+          border-radius: ${radiusCss};
+          background-color: ${bgColor};
+          border: ${borderCss};
+          color: #f2f2f2;
+          font-size: 0.9em;
+        "
+      >
+        <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
+        <span class="font-semibold">+${fmt1(rawValue)}</span>
+      </div>
+    </div>
+  `;
+}
 // #endregion Header Rendering
 
 // #region Details Rendering
