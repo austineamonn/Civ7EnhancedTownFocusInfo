@@ -49,8 +49,9 @@ export default class TempleDetails {
           walls: [],
         };
       }
-
-      const isWall = Locale.compose(info.Name).includes("Wall");
+      
+      const typeName = info.ConstructibleType || "";
+      const isWall = typeName.includes("WALLS") || typeName.includes("FORTIFICATIONS");
 
       if (isWall) {
         // Track walls on this tile
@@ -90,10 +91,11 @@ export default class TempleDetails {
     const bullet = "•";
     const labelTotalBuildings = Locale.compose("LOC_MOD_ETFI_TOTAL_BUILDINGS");
     const labelTotalWalls = Locale.compose("LOC_MOD_ETFI_TOTAL_WALLS");
+    const totalHappiness = totalBuildings + totalWalls;
 
     let html = `
       <div class="flex flex-col w-full">
-        ${renderHeader(ETFI_YIELDS.HAPPINESS, totalBuildings)}
+        ${renderHeader(ETFI_YIELDS.HAPPINESS, totalHappiness)}
 
         <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
           <!-- Buildings summary -->
