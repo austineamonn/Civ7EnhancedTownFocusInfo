@@ -177,6 +177,7 @@ export default class ResortDetails {
     for (const item of improvementItems) {
       const hVal = fmt1(item.deltaH);
       const gVal = fmt1(item.deltaG);
+    
       html += `
         <div class="flex justify-between items-center mt-1">
           <div class="flex items-center gap-2">
@@ -185,12 +186,13 @@ export default class ResortDetails {
             <span>${item.displayName}</span>
             <span class="opacity-70 ml-1">x${item.count}</span>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="flex items-center gap-2">
+    
+          <div class="flex flex-wrap justify-end items-center gap-2">
+            <span class="inline-flex items-center gap-2 ml-2">
               <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
               <span class="font-semibold">+${hVal}</span>
             </span>
-            <span class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-2 ml-2">
               <fxs-icon data-icon-id="${ETFI_YIELDS.GOLD}" class="size-4"></fxs-icon>
               <span class="font-semibold">+${gVal}</span>
             </span>
@@ -200,51 +202,83 @@ export default class ResortDetails {
     }
 
     // Natural Wonders, as rows directly under improvements
-    if (wonderItems.length) {
-      for (const w of wonderItems) {
-        // Primary H/G, then all others
-        const primaryOrder = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
-        const secondaryOrder = [];
-        for (const yInfo of GameInfo.Yields) {
-          const yType = yInfo.YieldType;
-          if (primaryOrder.indexOf(yType) !== -1) continue;
-          secondaryOrder.push(yType);
-        }
-        const orderedYields = primaryOrder.concat(secondaryOrder);
+if (wonderItems.length) {
+  for (const w of wonderItems) {
+    // Build two groups of yields:
+    // - primary: Happiness + Gold
+    // - secondary: everything else, shown on a second line
+    const primaryOrder = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
 
-        let yieldsHtml = "";
-        for (const yType of orderedYields) {
-          const val = w.yields?.[yType];
-          if (!val) continue;
-          yieldsHtml += `
-            <span class="inline-flex items-center gap-2 mr-1">
-              <fxs-icon data-icon-id="${yType}" class="size-4"></fxs-icon>
-              <span>+${fmt1(val)}</span>
-            </span>
-          `;
-        }
+    const primaryHtmlParts = [];
+    const secondaryHtmlParts = [];
 
-        html += `
-          <div class="flex justify-between items-start mt-1">
-            <div class="flex flex-col min-w-0">
-              <div class="flex items-center gap-2">
-                <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
-                <span class="opacity-60">| </span>
-                <span>${w.key}</span>
-                <span class="opacity-70 ml-1">x${w.count}</span>
-              </div>
-              <div class="mt-0.5 ml-7 text-white/80" style="font-size: 0.75em;">
-                ${labelNaturalWonder}
-              </div>
-            </div>
-            <div class="flex flex-wrap justify-end">
-              ${yieldsHtml}
-            </div>
-          </div>
-        `;
+    // Walk the game's yield list so the order is stable.
+    for (const yInfo of GameInfo.Yields) {
+      const yType = yInfo.YieldType;
+      const val = w.yields?.[yType];
+      if (!val) continue; // skip 0 / undefined
+
+      // One yield chip: [icon] +[value]
+      // Use margin-left to add space between chips on the same line.
+      const part = `
+        <span class="inline-flex items-center gap-1" style="margin-left: 0.5rem;">
+          <fxs-icon data-icon-id="${yType}" class="size-4"></fxs-icon>
+          <span>+${fmt1(val)}</span>
+        </span>
+      `;
+
+      if (primaryOrder.indexOf(yType) !== -1) {
+        primaryHtmlParts.push(part);
+      } else {
+        secondaryHtmlParts.push(part);
       }
     }
 
+    // Right-side block: H+G row, then "other yields" row (if any)
+    let rightHtml = "";
+    if (primaryHtmlParts.length || secondaryHtmlParts.length) {
+      rightHtml = `
+        <div class="flex flex-col items-end text-right shrink-0">
+          ${
+            primaryHtmlParts.length
+              ? `
+                <div class="flex flex-wrap justify-end items-center mt-0.5">
+                  ${primaryHtmlParts.join("")}
+                </div>
+              `
+              : ""
+          }
+          ${
+            secondaryHtmlParts.length
+              ? `
+                <div class="flex flex-wrap justify-end items-center mt-0.5">
+                  ${secondaryHtmlParts.join("")}
+                </div>
+              `
+              : ""
+          }
+        </div>
+      `;
+    }
+
+    html += `
+      <div class="flex justify-between items-start mt-1">
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-2">
+            <fxs-icon data-icon-id="${w.iconId}" class="size-5"></fxs-icon>
+            <span class="opacity-60">| </span>
+            <span>${w.key}</span>
+            <span class="opacity-70 ml-1">x${w.count}</span>
+          </div>
+          <div class="mt-0.5 ml-7 text-white/80" style="font-size: 0.75em;">
+            ${labelNaturalWonder}
+          </div>
+        </div>
+        ${rightHtml}
+      </div>
+    `;
+  }
+}
     html += `
         </div>  <!-- end details section -->
       </div>    <!-- end outer container -->
