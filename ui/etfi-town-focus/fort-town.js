@@ -20,12 +20,13 @@ export default class FortTownDetails {
    * inside a colored pill.
    */
   render(city) { // `city` is unused, but kept for API consistency
+    if (!city || !Cities || typeof city.getConnectedCities !== "function") return null;
+    
     const value = 25;
-    const headerHtml = renderHeader([ETFI_YIELDS.FORTIFY], value);
 
     return `
       <div class="flex flex-col w-full">
-        ${headerHtml}
+        ${renderHeader([ETFI_YIELDS.FORTIFY], value)}
       </div>
     `;
   }

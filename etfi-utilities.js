@@ -34,6 +34,7 @@ const HEADER_YIELD_COLORS = Object.freeze({
   [ETFI_YIELDS.CULTURE]:    "rgba( 92,  92, 214, 0.35)", // #5c5cd6
   [ETFI_YIELDS.HAPPINESS]:  "rgba(245, 153,  61, 0.35)", // #f5993d
   [ETFI_YIELDS.INFLUENCE]:  "rgba(175, 183, 207, 0.35)", // #afb7cf
+  [ETFI_YIELDS.FORTIFY]:  "rgba(204, 208, 219, 0.35)", // #afb7cf
 });
 
 // Fallback pill background color if we don't recognize the yield type.
@@ -320,7 +321,7 @@ function formatYieldBackground(yType, rawValue, isColorful) {
   // Colorful mode: tinted pill. Non-colorful: transparent, no border, tighter padding.
   const bgColor   = isColorful ? baseColor : "transparent";
   const borderCss = isColorful ? `2px solid ${baseColor}` : "none";
-  const paddingCss = isColorful ? "0.5px 4px 0.5px 8px" : "0";
+  const paddingCss = isColorful ? "0.5px 8px 0.5px 8px" : "0";
   const radiusCss = isColorful ? "9999px" : "0";
 
   const formatted = fmt1(rawValue);
