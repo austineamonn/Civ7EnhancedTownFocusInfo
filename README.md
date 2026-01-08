@@ -123,16 +123,6 @@ A mod for Civilization VII that enhances the display of town focus yield bonuses
 - Simplified Chinese
 - Korean (New!)
 
-### Credits
-
-- Original work by Yamada
-- Maintained by Zatygold, but previously by Mallek
-- Russian translations by Webrok
-- Polish translations by Klajwert
-- Simplified Chinese translations by thendye
-- Korean translations by Hotsolidinfill
-- Special thanks to fulfom for reporting and helping fix the Urban Center quarters bug
-
 ## Overview
 
 Enhanced Town Focus Info is a quality-of-life mod for Civilization VII that provides detailed breakdowns of yield bonuses when selecting town specializations. This mod enhances the tooltip display to show exactly how many buildings, improvements, and trade routes contribute to each specialization's bonuses.
