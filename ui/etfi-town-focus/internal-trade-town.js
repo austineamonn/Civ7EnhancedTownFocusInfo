@@ -35,6 +35,7 @@ export default class InternalTradeDetails {
       }
     }
 
+    const tradeRange = -5;
     const totalConnections = 5*(towns.length + citiesList.length);
     if (totalConnections === 0) return null;
 
@@ -42,9 +43,15 @@ export default class InternalTradeDetails {
     const labelTowns = Locale.compose("LOC_MOD_ETFI_CONNECTED_TOWNS");
     const labelTotalConnections = Locale.compose("LOC_MOD_ETFI_TOTAL_CONNECTIONS");
 
+    const ORDERED_YIELDS = [ETFI_YIELDS.TRADE, ETFI_YIELDS.GOLD];
+    const totals = {
+      [ETFI_YIELDS.TRADE]: tradeRange,
+      [ETFI_YIELDS.GOLD]: totalConnections,
+    };
+
     let html = `
       <div class="flex flex-col w-full">
-        ${renderHeader(ETFI_YIELDS.GOLD, totalConnections)}
+        ${renderHeader(ORDERED_YIELDS, totals)}
         <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
           <div class="flex justify-between mb-1">
             <span>${labelTotalConnections}</span>

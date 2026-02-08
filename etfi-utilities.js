@@ -347,6 +347,13 @@ function formatYieldBackground(yType, rawValue, isColorful) {
     spanStyle = "display:inline-block; min-width: 2.1em; text-align:right;";
   } // 3+ digits just use natural width
 
+  // Adds a plus for nonnegative values.
+  let signedFormatted = formatted;
+  if (rawValue>=0) {
+    const plus = "+";
+    signedFormatted = plus.concat(formatted);
+  }
+
   return `
     <div class="flex items-center mx-1">
       <div
@@ -363,7 +370,7 @@ function formatYieldBackground(yType, rawValue, isColorful) {
         "
       >
         <fxs-icon data-icon-id="${yType}" class="size-7"></fxs-icon>
-        <span class="font-semibold" style="${spanStyle}">+${formatted}</span>
+        <span class="font-semibold" style="${spanStyle}">${signedFormatted}</span>
       </div>
     </div>
   `;
