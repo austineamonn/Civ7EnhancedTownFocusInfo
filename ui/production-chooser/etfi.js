@@ -11,6 +11,7 @@ import { A as AdvisorUtilities } from '/base-standard/ui/tutorial/tutorial-suppo
 import FoodFocusDetails from '../etfi-town-focus/farm-fish-towns.js';
 import MiningDetails from '../etfi-town-focus/mining-town.js';
 import HubDetails from '../etfi-town-focus/hub-town.js';
+import InternalTradeDetails from '../etfi-town-focus/internal-trade-town.js';
 import ResortDetails from '../etfi-town-focus/resort-town.js';
 import TradeDetails from '../etfi-town-focus/trade-town.js';
 import TempleDetails from '../etfi-town-focus/temple-town.js';
@@ -24,6 +25,7 @@ const ETFI_PROJECT_TYPES = {
   TOWN_FISHING: "LOC_PROJECT_TOWN_FISHING_NAME",
   TOWN_MINING: "LOC_PROJECT_TOWN_PRODUCTION_NAME",
   TOWN_HUB: "LOC_PROJECT_TOWN_INN_NAME",
+  TOWN_INTERNAL_TRADE: "LOC_PROJECT_TOWN_INTERNAL_TRADE_NAME",
   TOWN_TRADE: "LOC_PROJECT_TOWN_TRADE_NAME",
   TOWN_RESORT: "LOC_PROJECT_TOWN_RESORT_NAME",
   TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME",
@@ -222,6 +224,11 @@ class EtfiToolTipType {
           const html = new HubDetails().render(city);
           return html || this.onRenderEmptyDetailsHTML(projectNameKey);
         }
+
+        case ETFI_PROJECT_TYPES.TOWN_INTERNAL_TRADE: {
+          const html = new InternalTradeDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
         
         case ETFI_PROJECT_TYPES.TOWN_TRADE: {
           const html = new TradeDetails().render(city);
@@ -254,14 +261,15 @@ class EtfiToolTipType {
     }
     onRenderEmptyDetailsHTML(projectNameKey) { // NEW: render fallback empty header with +0 yields based on project type
       const map = {};
-      map[ETFI_PROJECT_TYPES.TOWN_FARMING]  = [ETFI_YIELDS.FOOD];
-      map[ETFI_PROJECT_TYPES.TOWN_FISHING]  = [ETFI_YIELDS.FOOD];
-      map[ETFI_PROJECT_TYPES.TOWN_MINING]   = [ETFI_YIELDS.PRODUCTION];
-      map[ETFI_PROJECT_TYPES.TOWN_HUB]      = [ETFI_YIELDS.INFLUENCE];
-      map[ETFI_PROJECT_TYPES.TOWN_TRADE]    = [ETFI_YIELDS.HAPPINESS];
-      map[ETFI_PROJECT_TYPES.TOWN_RESORT]   = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
-      map[ETFI_PROJECT_TYPES.TOWN_TEMPLE]   = [ETFI_YIELDS.HAPPINESS];
-      map[ETFI_PROJECT_TYPES.TOWN_URBAN]    = [ETFI_YIELDS.GOLD, ETFI_YIELDS.HAPPINESS];
+      map[ETFI_PROJECT_TYPES.TOWN_FARMING]        = [ETFI_YIELDS.FOOD];
+      map[ETFI_PROJECT_TYPES.TOWN_FISHING]        = [ETFI_YIELDS.FOOD];
+      map[ETFI_PROJECT_TYPES.TOWN_MINING]         = [ETFI_YIELDS.PRODUCTION];
+      map[ETFI_PROJECT_TYPES.TOWN_HUB]            = [ETFI_YIELDS.INFLUENCE];
+      map[ETFI_PROJECT_TYPES.TOWN_INTERNAL_TRADE] = [ETFI_YIELDS.GOLD];
+      map[ETFI_PROJECT_TYPES.TOWN_TRADE]          = [ETFI_YIELDS.HAPPINESS];
+      map[ETFI_PROJECT_TYPES.TOWN_RESORT]         = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
+      map[ETFI_PROJECT_TYPES.TOWN_TEMPLE]         = [ETFI_YIELDS.HAPPINESS];
+      map[ETFI_PROJECT_TYPES.TOWN_URBAN]          = [ETFI_YIELDS.GOLD, ETFI_YIELDS.HAPPINESS];
 
       const yields = map[projectNameKey] || [];
 
