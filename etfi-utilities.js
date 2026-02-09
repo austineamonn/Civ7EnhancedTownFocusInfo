@@ -128,7 +128,7 @@ export function getEraMultiplier(base = 1) {
  * @param {number} [options.baseMultiplier=1] - per-improvement yield before era scaling
  * @returns {Object|null} summary object or null if nothing matched
  */
-export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, baseMultiplier = 1 } = {}) {
+export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, baseMultiplier = 1, targetBiome = null } = {}) {
   if (!city || !city.Constructibles) return null;
   if (!(targetSet instanceof Set) || targetSet.size === 0) return null;
   if (!GameInfo?.Constructibles || !Districts || !Constructibles) return null;
@@ -142,6 +142,11 @@ export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, b
 
     const location = instance.location;
     if (!location || location.x == null || location.y == null) continue;
+
+    // If there is a target biome ignore improvements
+    const biomeType = GameplayMap.getBiomeType(location.x, location.y);
+    const biome = GameInfo.Biomes.lookup(biomeType);
+    if (targetBiome != null && (biome && biome.BiomeType != targetBiome)) continue;
 
     // Use the "free constructible" to determine the logical improvement type at this tile.
     // This respects warehouses or other mechanics that alter the tile's effective improvement.
