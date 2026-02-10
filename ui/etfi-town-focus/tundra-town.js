@@ -1,117 +1,18 @@
 // Tundra (Tundra Biome → Culture) details renderer.
 // - +1,+1,+2 Culture per Tundra tile (city center + purchased).
-// - Shows total Culture, total Tundra tiles, and per-resource breakdown.
+// - Shows total Culture, total Tundra tiles, and improvement breakdown.
 // Returns null if no resource tiles are found (caller can render +0 fallback).
 
-import { ETFI_YIELDS, renderHeader } from "../../etfi-utilities.js";
+import { ETFI_YIELDS, getBiomeSummaryForSet, renderImprovementDetailsHTML }  from "../../etfi-utilities.js";
 
 export default class TundraDetails {
-  /**
-   * Shows total purchased+center Tundra tiles and +Culture from them.
-   * - Header: +Culture total
-   * - Summary: Total Tundra tiles
-   * - Rows: one per improvement type (icon | name x count | +Culture)
-   * Returns null if no Tundra tiles are found.
-   */
-  render(city) {//maybe should be tundra not Biomes?
-    if (!city || !GameplayMap || !GameInfo?.Biomes) return null;
-
-    const cityLocation = city.location;
-    const getPurchasedPlots =
-      typeof city.getPurchasedPlots === "function"
-        ? city.getPurchasedPlots.bind(city)
-        : null;
-
-    if (!cityLocation) return null;
-
-    // Collect plots: city center + purchased plots
-    const plots = [cityLocation];
-    const purchasedPlotIndices = getPurchasedPlots ? getPurchasedPlots() : [];
-
-    if (Array.isArray(purchasedPlotIndices)) {
-      for (const plotIndex of purchasedPlotIndices) {
-        const plotCoords = GameplayMap.getLocationFromIndex(plotIndex);
-        if (plotCoords && plotCoords.x != null && plotCoords.y != null) {
-          plots.push(plotCoords);
-        }
-      }
-    }
-
-    const NO_RESOURCE =
-      (typeof ResourceTypes !== "undefined" && ResourceTypes.NO_RESOURCE) || 0;
-
-    const resourcesByType = Object.create(null);
-    let totalTundraTiles = 0;
-
-    for (const plot of plots) {
-      if (!plot || plot.x == null || plot.y == null) continue;
-
-      const biomeInfo = GameInfo.Biomes.lookup(biomeType);
-      if (!biomeInfo) continue;
-
-      // skip non Tundra tiles and wonder tiles
-      if (biome && biome.BiomeType != "BIOME_TUNDRA") continue;
-
-      if (GameplayMap.isNaturalWonder(x, y)) continue;
-
-      const resourceInfo = GameInfo.Resources.lookup(resourceType);
-      if (!resourceInfo) continue;
-
-      const iconId = resourceInfo.ResourceType; // e.g. RESOURCE_IRON
-      const name = Locale.compose(resourceInfo.Name);
-
-      if (!resourcesByType[iconId]) {
-        resourcesByType[iconId] = { iconId, name, count: 0 };
-      }
-      resourcesByType[iconId].count += 1;
-      totalTundraTiles += 1;
-    }
-
-    const items = Object.values(resourcesByType);
-    if (!items.length) return null;
-
-    // Trade Outpost rule:+5 Trade range and +2 Happiness per resource tile
-    const tradeRange = 5;
-    const happinessPerTile = 2;
-    const totalHappiness = totalResourceTiles * happinessPerTile;
-
-    const labelTotalResources = Locale.compose("LOC_MOD_ETFI_TOTAL_RESOURCES");
-
-    const ORDERED_YIELDS = [ETFI_YIELDS.TRADE, ETFI_YIELDS.HAPPINESS];
-    const totals = {
-      [ETFI_YIELDS.TRADE]: tradeRange,
-      [ETFI_YIELDS.HAPPINESS]: totalHappiness,
-    };
-
-    let html = `
-      <div class="flex flex-col w-full">
-        ${renderHeader(ORDERED_YIELDS, totals)}
-        <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4%;">
-          <div class="flex justify-between mb-1">
-            <span>${labelTotalResources}</span>
-            <span>${totalResourceTiles}</span>
-          </div>
-          <div class="mt-1 border-t border-white/10"></div>
-    `;
-
-    for (const item of items) {
-      const happinessFromThisResource = item.count * happinessPerTile;
-      html += `
-        <div class="flex justify-between items-center mt-1">
-          <div class="flex items-center gap-2">
-            <fxs-icon data-icon-id="${item.iconId}" class="size-5"></fxs-icon>
-            <span class="opacity-60">| </span>
-            <span>${item.name}</span>
-            <span class="opacity-70 ml-1">x${item.count}</span>
-          </div>
-          <div class="flex items-center gap-1">
-            <fxs-icon data-icon-id="${ETFI_YIELDS.HAPPINESS}" class="size-4"></fxs-icon>
-            <span class="font-semibold">+${happinessFromThisResource}</span>
-          </div>
-        </div>
-      `;
-    }
-
-    return html;
+  render(city) {
+      const summary = getBiomeSummaryForSet({
+        city,
+        baseMultiplier: 1, // your rule
+        targetBiome: "BIOME_TUNDRA"
+      });
+      if (!summary) return null;
+      return renderImprovementDetailsHTML(summary, ETFI_YIELDS.CULTURE);
   }
 }

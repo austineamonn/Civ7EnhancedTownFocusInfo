@@ -17,6 +17,7 @@ import TradeDetails from '../etfi-town-focus/trade-town.js';
 import TempleDetails from '../etfi-town-focus/temple-town.js';
 import UrbanCenterDetails from '../etfi-town-focus/urban-town.js';
 import FortTownDetails from '../etfi-town-focus/fort-town.js';
+import TundraDetails from '../etfi-town-focus/tundra-town.js';
 import { ETFI_YIELDS } from '../../etfi-utilities.js';
 
 // #region Localization constants
@@ -30,7 +31,8 @@ const ETFI_PROJECT_TYPES = {
   TOWN_RESORT: "LOC_PROJECT_TOWN_RESORT_NAME",
   TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME",
   TOWN_URBAN: "LOC_PROJECT_TOWN_URBAN_CENTER_NAME",
-  TOWN_FORT: "LOC_PROJECT_TOWN_FORT_NAME"
+  TOWN_FORT: "LOC_PROJECT_TOWN_FORT_NAME",
+  TOWN_TUNDRA: "LOC_PROJECT_TOWN_TUNDRA_NAME"
 };
 
 // #region EtfiToolTipType
@@ -255,6 +257,12 @@ class EtfiToolTipType {
           return html || this.onRenderEmptyDetailsHTML(projectNameKey);
         }
 
+        case ETFI_PROJECT_TYPES.TOWN_TUNDRA: {
+          const html = new TundraDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+
         default:
           return null;
       }
@@ -270,6 +278,7 @@ class EtfiToolTipType {
       map[ETFI_PROJECT_TYPES.TOWN_RESORT]         = [ETFI_YIELDS.HAPPINESS, ETFI_YIELDS.GOLD];
       map[ETFI_PROJECT_TYPES.TOWN_TEMPLE]         = [ETFI_YIELDS.HAPPINESS];
       map[ETFI_PROJECT_TYPES.TOWN_URBAN]          = [ETFI_YIELDS.GOLD, ETFI_YIELDS.HAPPINESS];
+      map[ETFI_PROJECT_TYPES.TOWN_TUNDRA]         = [ETFI_YIELDS.CULTURE];
 
       const yields = map[projectNameKey] || [];
 

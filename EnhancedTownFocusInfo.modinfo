@@ -50,12 +50,14 @@
 						<Item>ui/production-chooser/etfi.js</Item>
 						<Item>ui/etfi-town-focus/farm-fish-towns.js</Item>
 						<Item>ui/etfi-town-focus/hub-town.js</Item>
+						<Item>ui/etfi-town-focus/internal-trade-town.js</Item>
 						<Item>ui/etfi-town-focus/mining-town.js</Item>
 						<Item>ui/etfi-town-focus/resort-town.js</Item>
 						<Item>ui/etfi-town-focus/temple-town.js</Item>
 						<Item>ui/etfi-town-focus/trade-town.js</Item>
 						<Item>ui/etfi-town-focus/urban-town.js</Item>
 						<Item>ui/etfi-town-focus/fort-town.js</Item>
+						<Item>ui/etfi-town-focus/tundra-town.js</Item>
 						<Item>etfi-utilities.js</Item>
 					</UIScripts>
 				<UpdateText>

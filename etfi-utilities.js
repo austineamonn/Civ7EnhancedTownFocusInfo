@@ -128,7 +128,7 @@ export function getEraMultiplier(base = 1) {
  * @param {number} [options.baseMultiplier=1] - per-improvement yield before era scaling
  * @returns {Object|null} summary object or null if nothing matched
  */
-export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, baseMultiplier = 1, targetBiome = null } = {}) {
+export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, baseMultiplier = 1 } = {}) {
   if (!city || !city.Constructibles) return null;
   if (!(targetSet instanceof Set) || targetSet.size === 0) return null;
   if (!GameInfo?.Constructibles || !Districts || !Constructibles) return null;
@@ -142,11 +142,6 @@ export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, b
 
     const location = instance.location;
     if (!location || location.x == null || location.y == null) continue;
-
-    // If there is a target biome ignore improvements
-    const biomeType = GameplayMap.getBiomeType(location.x, location.y);
-    const biome = GameInfo.Biomes.lookup(biomeType);
-    if (targetBiome != null && (biome && biome.BiomeType != targetBiome)) continue;
 
     // Use the "free constructible" to determine the logical improvement type at this tile.
     // This respects warehouses or other mechanics that alter the tile's effective improvement.
@@ -163,6 +158,97 @@ export function getImprovementSummaryForSet({ city, targetSet, displayNameMap, b
 
     // Optionally override the display key from displayNameMap; otherwise use the LOC name or type.
     const displayKey = (displayNameMap && displayNameMap[ctype]) || info?.Name || ctype;
+
+    if (!resultByDisplayKey[displayKey]) {
+      resultByDisplayKey[displayKey] = {
+        key: displayKey,
+        ctype,
+        iconId: ctype,                 
+        displayName: Locale.compose(displayKey),
+        count: 0,
+      };
+    }
+    resultByDisplayKey[displayKey].count += 1;
+  }
+
+  const items = Object.values(resultByDisplayKey);
+  if (!items.length) return null;
+
+  const baseTotal = items.reduce((sum, it) => sum + it.count, 0);
+  const multiplier = getEraMultiplier(baseMultiplier);
+  const total = baseTotal * multiplier;
+
+  return { items, total, multiplier, baseCount: baseTotal };
+}
+
+/**
+ * Scan the city's improvements and build a summary object for a given "logical set"
+ * of improvement types with at least one improvement in the target biome (e.g. a farm on tundra for tundra towns).
+ *
+ * This function:
+ * - Filters improvement instances to those whose logical free-constructible type
+ *   is in `targetSet`.
+ * - Groups them by a display key (with optional overrides from `displayNameMap`).
+ * - Counts how many of each display key exists.
+ * - Applies an era multiplier to compute the total yield effect.
+ *
+ * Return structure:
+ * {
+ *   items: [
+ *     {
+ *       key,        // display key used for grouping
+ *       ctype,      // ConstructibleType used as icon ID
+ *       iconId,     // same as ctype; used by <fxs-icon>
+ *       displayName,// localized display string
+ *       count       // number of instances for this group
+ *     },
+ *     ...
+ *   ],
+ *   total,         // baseTotal * eraMultiplier
+ *   multiplier,    // era multiplier actually used
+ *   baseCount      // total number of qualifying improvements
+ * }
+ *
+ * @param {Object} options
+ * @param {Object} options.city - city object containing Constructibles
+ * @param {number} [options.baseMultiplier=1] - per-improvement yield before era scaling
+ * @param {String} options.targetBiome - biome of the city center
+ * @returns {Object|null} summary object or null if nothing matched
+ */
+export function getBiomeSummaryForSet({ city, baseMultiplier = 1, targetBiome } = {}) {
+  if (!city || !city.Constructibles) return null;
+  if (!GameInfo?.Constructibles || !Districts || !Constructibles) return null;
+
+  const resultByDisplayKey = Object.create(null);
+  const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
+
+  for (const instanceId of improvements) {
+    const instance = Constructibles.get(instanceId);
+    if (!instance) continue;
+
+    const location = instance.location;
+    if (!location || location.x == null || location.y == null) continue;
+
+    // Ignore improvements not in the target biome
+    const biomeType = GameplayMap.getBiomeType(location.x, location.y);
+    const biome = GameInfo.Biomes.lookup(biomeType);
+    if (targetBiome != null && (biome && biome.BiomeType != targetBiome)) continue;
+
+    // Use the "free constructible" to determine the logical improvement type at this tile.
+    // This respects warehouses or other mechanics that alter the tile's effective improvement.
+    const fcID = Districts.getFreeConstructible(location, GameContext.localPlayerID);
+    const fcInfo = GameInfo.Constructibles.lookup(fcID);
+    if (!fcInfo) continue;
+
+    // Use all improvements for biome towns
+    const logicalType = fcInfo.ConstructibleType;
+
+    // Use the actual instance's ConstructibleType and name for display and icon.
+    const info = GameInfo.Constructibles.lookup(instance.type);
+    const ctype = info?.ConstructibleType || logicalType;
+
+    // Optionally override the display key from displayNameMap; otherwise use the LOC name or type.
+    const displayKey = info?.Name || ctype;
 
     if (!resultByDisplayKey[displayKey]) {
       resultByDisplayKey[displayKey] = {
