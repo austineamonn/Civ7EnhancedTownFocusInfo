@@ -58,6 +58,12 @@
 						<Item>ui/etfi-town-focus/urban-town.js</Item>
 						<Item>ui/etfi-town-focus/fort-town.js</Item>
 						<Item>ui/etfi-town-focus/tundra-town.js</Item>
+						<Item>ui/etfi-town-focus/grassland-town.js</Item>
+						<Item>ui/etfi-town-focus/desert-town.js</Item>
+						<Item>ui/etfi-town-focus/plains-town.js</Item>
+						<Item>ui/etfi-town-focus/tropical-town.js</Item>
+						<Item>ui/etfi-town-focus/lakeside-town.js</Item>
+						<Item>ui/etfi-town-focus/river-town.js</Item>
 						<Item>etfi-utilities.js</Item>
 					</UIScripts>
 				<UpdateText>

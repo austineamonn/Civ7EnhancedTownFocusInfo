@@ -18,6 +18,12 @@ import TempleDetails from '../etfi-town-focus/temple-town.js';
 import UrbanCenterDetails from '../etfi-town-focus/urban-town.js';
 import FortTownDetails from '../etfi-town-focus/fort-town.js';
 import TundraDetails from '../etfi-town-focus/tundra-town.js';
+import GrasslandDetails from '../etfi-town-focus/grassland-town.js';
+import DesertDetails from '../etfi-town-focus/desert-town.js';
+import PlainsDetails from '../etfi-town-focus/plains-town.js';
+import TropicalDetails from '../etfi-town-focus/tropical-town.js';
+import LakeDetails from '../etfi-town-focus/lakeside-town.js';
+import RiverDetails from '../etfi-town-focus/river-town.js';
 import { ETFI_YIELDS } from '../../etfi-utilities.js';
 
 // #region Localization constants
@@ -32,7 +38,13 @@ const ETFI_PROJECT_TYPES = {
   TOWN_TEMPLE:"LOC_PROJECT_TOWN_TEMPLE_NAME",
   TOWN_URBAN: "LOC_PROJECT_TOWN_URBAN_CENTER_NAME",
   TOWN_FORT: "LOC_PROJECT_TOWN_FORT_NAME",
-  TOWN_TUNDRA: "LOC_PROJECT_TOWN_TUNDRA_NAME"
+  TOWN_TUNDRA: "LOC_PROJECT_TOWN_TUNDRA_NAME",
+  TOWN_GRASSLAND: "LOC_PROJECT_TOWN_GRASSLAND_NAME",
+  TOWN_DESERT: "LOC_PROJECT_TOWN_DESERT_NAME",
+  TOWN_PLAINS: "LOC_PROJECT_TOWN_PLAINS_NAME",
+  TOWN_TROPICAL: "LOC_PROJECT_TOWN_TROPICAL_NAME",
+  TOWN_LAKESIDE: "LOC_PROJECT_TOWN_LAKESIDE_NAME",
+  TOWN_RIVER: "LOC_PROJECT_TOWN_RIVER_NAME"
 };
 
 // #region EtfiToolTipType
@@ -262,6 +274,35 @@ class EtfiToolTipType {
           return html || this.onRenderEmptyDetailsHTML(projectNameKey);
         }
 
+        case ETFI_PROJECT_TYPES.TOWN_GRASSLAND: {
+          const html = new GrasslandDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+        case ETFI_PROJECT_TYPES.TOWN_DESERT: {
+          const html = new DesertDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+        case ETFI_PROJECT_TYPES.TOWN_PLAINS: {
+          const html = new PlainsDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+        case ETFI_PROJECT_TYPES.TOWN_TROPICAL: {
+          const html = new TropicalDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+        case ETFI_PROJECT_TYPES.TOWN_LAKESIDE: {
+          const html = new LakeDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
+
+        case ETFI_PROJECT_TYPES.TOWN_RIVER: {
+          const html = new RiverDetails().render(city);
+          return html || this.onRenderEmptyDetailsHTML(projectNameKey);
+        }
 
         default:
           return null;

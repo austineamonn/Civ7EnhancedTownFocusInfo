@@ -272,6 +272,96 @@ export function getBiomeSummaryForSet({ city, baseMultiplier = 1, targetBiome } 
   return { items, total, multiplier, baseCount: baseTotal };
 }
 
+/**
+ * Scan the city's improvements and build a summary object for a given "logical set"
+ * of improvement types with at least one improvement on the target feature (e.g. a farm on a river for river towns).
+ *
+ * This function:
+ * - Filters improvement instances to those whose logical free-constructible type
+ *   is in `targetSet`.
+ * - Groups them by a display key (with optional overrides from `displayNameMap`).
+ * - Counts how many of each display key exists.
+ * - Applies an era multiplier to compute the total yield effect.
+ *
+ * Return structure:
+ * {
+ *   items: [
+ *     {
+ *       key,        // display key used for grouping
+ *       ctype,      // ConstructibleType used as icon ID
+ *       iconId,     // same as ctype; used by <fxs-icon>
+ *       displayName,// localized display string
+ *       count       // number of instances for this group
+ *     },
+ *     ...
+ *   ],
+ *   total,         // baseTotal * eraMultiplier
+ *   multiplier,    // era multiplier actually used
+ *   baseCount      // total number of qualifying improvements
+ * }
+ *
+ * @param {Object} options
+ * @param {Object} options.city - city object containing Constructibles
+ * @param {number} [options.baseMultiplier=1] - per-improvement yield before era scaling
+ * @param {String} options.targetFeature - buffed feature for town ("LAKE", "RIVER")
+ * @returns {Object|null} summary object or null if nothing matched
+ */
+export function getFeatureSummaryForSet({ city, baseMultiplier = 1, targetFeature } = {}) {
+  if (!city || !city.Constructibles) return null;
+  if (!GameInfo?.Constructibles || !Districts || !Constructibles) return null;
+
+  const resultByDisplayKey = Object.create(null);
+  const improvements = city.Constructibles.getIdsOfClass("IMPROVEMENT") || [];
+
+  for (const instanceId of improvements) {
+    const instance = Constructibles.get(instanceId);
+    if (!instance) continue;
+
+    const location = instance.location;
+    if (!location || location.x == null || location.y == null) continue;
+
+    // Ignore improvements without the target feature
+    if (targetFeature == "LAKE" && !(GameplayMap.isLake(location.x, location.y))) continue;
+    if (targetFeature == "RIVER" && !(GameplayMap.isRiver(location.x, location.y))) continue;
+
+    // Use the "free constructible" to determine the logical improvement type at this tile.
+    // This respects warehouses or other mechanics that alter the tile's effective improvement.
+    const fcID = Districts.getFreeConstructible(location, GameContext.localPlayerID);
+    const fcInfo = GameInfo.Constructibles.lookup(fcID);
+    if (!fcInfo) continue;
+
+    // Use all improvements for biome towns
+    const logicalType = fcInfo.ConstructibleType;
+
+    // Use the actual instance's ConstructibleType and name for display and icon.
+    const info = GameInfo.Constructibles.lookup(instance.type);
+    const ctype = info?.ConstructibleType || logicalType;
+
+    // Optionally override the display key from displayNameMap; otherwise use the LOC name or type.
+    const displayKey = info?.Name || ctype;
+
+    if (!resultByDisplayKey[displayKey]) {
+      resultByDisplayKey[displayKey] = {
+        key: displayKey,
+        ctype,
+        iconId: ctype,                 
+        displayName: Locale.compose(displayKey),
+        count: 0,
+      };
+    }
+    resultByDisplayKey[displayKey].count += 1;
+  }
+
+  const items = Object.values(resultByDisplayKey);
+  if (!items.length) return null;
+
+  const baseTotal = items.reduce((sum, it) => sum + it.count, 0);
+  const multiplier = getEraMultiplier(baseMultiplier);
+  const total = baseTotal * multiplier;
+
+  return { items, total, multiplier, baseCount: baseTotal };
+}
+
 // #endregion Logic Helpers
 
 // #region Header Rendering
@@ -475,6 +565,12 @@ function formatYieldBackground(yType, rawValue, isColorful) {
  * - Farming Town
  * - Fishing Town
  * - Mining Town
+ * - Tundra Town
+ * - Grassland Town
+ * - Desert Town
+ * - Plains Town
+ * - Tropical Town
+ * - River Town
  *
  * Assumes `summary` came from `getImprovementSummaryForSet` and includes:
  *   - items: [{ iconId, displayName, count, ... }]
@@ -531,6 +627,80 @@ export function renderImprovementDetailsHTML(summary, yieldIconId) {
           <fxs-icon data-icon-id="${yieldIconId}" class="size-4"></fxs-icon>
           <span class="font-semibold">+${perImprovementYield}</span>
         </div>
+      </div>
+    `;
+  }
+
+  html += `</div></div>`;
+  return html;
+}
+
+/**
+ * Shared details renderer for the "improvement-based" Towns with 2 yields:
+ * - Lakside Town
+ *
+ * Assumes `summary` came from `getImprovementSummaryForSet` and includes:
+ *   - items: [{ iconId, displayName, count, ... }]
+ *   - total: total yield from all improvements (after era multiplier)
+ *   - multiplier: effective per-improvement multiplier after era scaling
+ *   - baseCount: total number of qualifying improvements
+ *
+ * Output HTML structure:
+ *   <div>
+ *     [ header with yield pill ]
+ *     [ "Total Improvements" row ]
+ *     [ one row per improvement group: icon | name xN | +yield1 + yield2 ]
+ *   </div>
+ *
+ * @param {Object} summary - result of getImprovementSummaryForSet(...)
+ * @param {string} yieldIconId1 - YieldType string used for the first yield icon (e.g. ETFI_YIELDS.FOOD)
+ * @param {string} yieldIconId2 - YieldType string used for the second yield icon (e.g. ETFI_YIELDS.GOLD)
+ * @returns {string|null} HTML snippet or null if summary is missing
+ */
+export function renderImprovementDoubleYieldDetailsHTML(summary, yieldIconId1, yieldIconId2) {
+  if (!summary) return null;
+
+  const { items, total, multiplier, baseCount } = summary;
+  const labelTotalImprovements = Locale.compose("LOC_MOD_ETFI_TOTAL_IMPROVEMENTS");
+
+  // Single-yield header: we pass a one-element array for the order
+  // and a map with that yield's total value.
+  const headerHtml = renderHeader([yieldIconId1, yieldIconId2], { [yieldIconId1]: total, [yieldIconId2]: total });
+
+  let html = `
+    <div class="flex flex-col w-full">
+      ${headerHtml}
+      <div class="mt-1 text-accent-2" style="font-size: 0.8em; line-height: 1.4;">
+        <div class="flex justify-between mb-1">
+          <span>${labelTotalImprovements}</span>
+          <span>${
+            typeof baseCount === "number" ? baseCount : Math.round(total / (multiplier || 1))
+          }</span>
+        </div>
+        <div class="mt-1 border-t border-white/10"></div>
+  `;
+
+  // Render each improvement group: [icon] | [name] x<count>    [first yield icon] +<count * multiplier [second yield icon] +<count * multiplier>
+  for (const item of items) {
+    const perImprovementYield = item.count * multiplier;
+    html += `
+      <div class="flex justify-between items-center mt-1">
+        <div class="flex items-center gap-2">
+          <fxs-icon data-icon-id="${item.iconId}" class="size-5"></fxs-icon>
+          <span class="opacity-60">| </span>
+          <span>${item.displayName}</span>
+          <span class="opacity-70 ml-1">x${item.count}</span>
+        </div>
+        <div class="flex flex-wrap justify-end items-center gap-2">
+            <span class="inline-flex items-center gap-2 ml-2">
+              <fxs-icon data-icon-id="${yieldIconId1}" class="size-4"></fxs-icon>
+              <span class="font-semibold">+${perImprovementYield}</span>
+            </span>
+            <span class="inline-flex items-center gap-2 ml-2">
+              <fxs-icon data-icon-id="${yieldIconId2}" class="size-4"></fxs-icon>
+              <span class="font-semibold">+${perImprovementYield}</span>
+            </span>
+          </div>
       </div>
     `;
   }
